@@ -4,7 +4,7 @@ import entity
 import texture_asset
 import time
 
-animation = texture_asset.WalkTexture(["humanAmAmFront1.png", "humanAmAmFront2.png"])
+animation = texture_asset.WalkTexture(["humanAmAmFront0.png", "humanAmAmFront1.png", "humanAmAmFront0.png", "humanAmAmFront2.png"])
 
 world = World.World()
 human = entity.Human([0, 0], animation)
