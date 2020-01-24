@@ -1,4 +1,4 @@
-BOX_SIZE = 5
+BOX_SIZE = 3
 
 class Entity:
     def __init__(self, pos, animation):
