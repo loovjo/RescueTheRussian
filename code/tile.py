@@ -27,3 +27,4 @@ class Tile:
         screen.blit(surf, top_left_corner)
 
 GROUND = Tile(texture_asset.TextureAsset(["floorWood.png"]))
+WALL = Tile(texture_asset.TextureAsset(["wallRedishStone.png"]))
