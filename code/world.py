@@ -1,5 +1,6 @@
 from tile import GROUND, WALL
 from entity import Human
+import math
 
 PIXELS_PER_UNIT = 100
 
@@ -40,9 +41,10 @@ class World:
 
     def update(self, dt):
         for entity in self.entities:
-            entity.update(dt)
+            entity.update(self, dt)
 
     def get_at(self, at):
+        at = (int(at[0]), int(at[1]))
         if 0 <= at[0] < len(self.tiles) and 0 <= at[1] < len(self.tiles[at[0]]):
             return self.tiles[at[0]][at[1]]
         return None

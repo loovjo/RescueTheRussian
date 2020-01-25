@@ -11,8 +11,8 @@ class Tile(ABC):
         self.tile_texture = tile_texture
 
     def draw(self, screen, world, at):
-        top_left_corner = world.transform_position((at[0] - 0.5, at[1] - 0.5))
-        bottom_right_corner = world.transform_position((at[0] + 0.5, at[1] + 0.5))
+        top_left_corner = world.transform_position((at[0], at[1]))
+        bottom_right_corner = world.transform_position((at[0] + 1, at[1] + 1))
 
         rect = pygame.Rect(
             *top_left_corner,
