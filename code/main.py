@@ -50,7 +50,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    screen.fill((255, 255, 255))
+    screen.fill((0, 0, 0))
 
     world.draw(screen)
 

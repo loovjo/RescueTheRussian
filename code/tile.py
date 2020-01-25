@@ -46,4 +46,4 @@ class Wall(Tile):
         return True
 
 GROUND = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL = Wall(SimpleTexture(TextureAsset(["wallRedishStone.png"])))
+WALL = Wall(SimpleTexture(TextureAsset(["wallCobble.png"])))
