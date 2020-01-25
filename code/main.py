@@ -1,5 +1,5 @@
 import pygame
-import World
+import world
 import entity
 import texture_asset
 import time
@@ -7,7 +7,7 @@ import random
 
 animation = texture_asset.WalkTexture(["humanAmAmFront0.png", "humanAmAmFront1.png", "humanAmAmFront0.png", "humanAmAmFront2.png"])
 
-world = World.World()
+world = world.World()
 human = entity.Human([0, 0], animation)
 world.entities.append(human)
 
@@ -23,14 +23,9 @@ acc = [0, 0]
 
 last_time = time.time()
 
-black = pygame.image.load("logo.png")
-black = pygame.transform.scale(black, (screen.get_width(), screen.get_height()))
-black = black.convert()
-black.set_alpha(30)
-
 while True:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             exit()
 
         if event.type == pygame.KEYDOWN:
@@ -53,8 +48,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    if random.random() < 0.4:
-        screen.blit(black, (0, 0))
+    screen.fill((0, 0, 0))
 
     world.draw(screen)
 
