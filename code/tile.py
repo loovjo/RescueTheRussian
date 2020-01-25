@@ -1,11 +1,14 @@
+from abc import ABC, abstractmethod
+
 import math
 
 import pygame
-import texture_asset
+from texture_asset import TextureAsset
+from tiletexture import SimpleTexture
 
-class Tile:
-    def __init__(self, texture):
-        self.texture = texture
+class Tile(ABC):
+    def __init__(self, tile_texture):
+        self.tile_texture = tile_texture
 
     def draw(self, screen, world, at):
         top_left_corner = world.transform_position((at[0] - 0.5, at[1] - 0.5))
@@ -22,8 +25,25 @@ class Tile:
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
-        surf = self.texture.get_current_sized(height)
+        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height)
 
         screen.blit(surf, top_left_corner)
 
-GROUND = Tile(texture_asset.TextureAsset(["floorWood.png"]))
+    # False = can walk through
+    @abstractmethod
+    def walk_on(self, entity):
+        pass
+
+    def update(self, world, dt):
+        pass
+
+class Empty(Tile):
+    def walk_on(self, entity):
+        return False
+
+class Wall(Tile):
+    def walk_on(self, entity):
+        return True
+
+GROUND = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
+WALL = Wall(SimpleTexture(TextureAsset(["wallRedishStone.png"])))
