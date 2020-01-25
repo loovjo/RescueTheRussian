@@ -20,22 +20,6 @@ class Entity:
 
         self.animation.walked(total_velocity)
 
-        if self.pos[0] > BOX_SIZE:
-            self.velocity[0] *= -1
-            self.pos[0] = BOX_SIZE
-
-        if self.pos[0] < -BOX_SIZE:
-            self.velocity[0] *= -1
-            self.pos[0] = -BOX_SIZE
-
-        if self.pos[1] > BOX_SIZE:
-            self.velocity[1] *= -1
-            self.pos[1] = BOX_SIZE
-
-        if self.pos[1] < -BOX_SIZE:
-            self.velocity[1] *= -1
-            self.pos[1] = -BOX_SIZE
-
     def draw(self, world, screen):
         top_left_corner = world.transform_position((self.pos[0] - 0.5, self.pos[1] - 0.5))
         bottom_left_corner = world.transform_position([self.pos[0] - 0.5, self.pos[1] + 0.5])

@@ -8,8 +8,7 @@ import random
 animation = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
 
 world = world.World()
-human = entity.Human([0, 0], animation)
-world.entities.append(human)
+world.entities.append(entity.Human([0, 0], animation))
 
 width, height = size = 1080, 800
 
@@ -57,6 +56,7 @@ while True:
     dt = time.time() - last_time
     last_time = time.time()
 
+    human = world.entities[world.get_player_idx()]
     human.velocity[0] += acc[0] * dt * 50
     human.velocity[1] += acc[1] * dt * 50
     world.update(dt)
