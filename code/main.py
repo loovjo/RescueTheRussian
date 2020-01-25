@@ -23,9 +23,10 @@ acc = [0, 0]
 
 last_time = time.time()
 
-black = pygame.Surface((screen.get_width(), screen.get_height()))
+black = pygame.image.load("logo.png")
+black = pygame.transform.scale(black, (screen.get_width(), screen.get_height()))
+black = black.convert()
 black.set_alpha(30)
-black.fill((0, 0, 0))
 
 while True:
     for event in pygame.event.get():
