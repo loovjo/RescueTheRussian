@@ -7,11 +7,11 @@ PIXELS_PER_UNIT = 100
 class World:
     def __init__(self):
         self.tiles = {} # {(x, y): Tile}
-        for x in range(0, 7):
+        for x in range(0, 8):
             row = []
-            for y in range(0, 7):
+            for y in range(0, 8):
                 here = FLOOR_WOOD
-                if x == 0 or x == 6 or y == 0 or y == 6:
+                if x == 0 or x == 7 or y == 0 or y == 7:
                     here = WALL_COBBLE
                 self.tiles[(x, y)] = here
 
