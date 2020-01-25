@@ -43,20 +43,22 @@ class Human(Entity):
         self.wa_right = wa_right
 
     def update(self, dt):
-        if abs(self.velocity[0]) > abs(velocity[1]):
+        if abs(self.velocity[0]) > abs(self.velocity[1]):
             if self.velocity[0] > 0:
                 self.animation = self.wa_right
             else:
                 self.animation = self.wa_left
         else:
             if self.velocity[1] > 0:
-                self.animation = self.wa_up
+                self.animation = self.wa_front
             else:
                 self.animation = self.wa_back
+
+        super().update(dt)
 
 wa_front = texture_asset.WalkTexture(["humanRuRuFront0.png", "humanRuRuFront1.png", "humanRuRuFront0.png", "humanRuRuFront2.png"])
 wa_left = texture_asset.WalkTexture(["humanRuRuLeft0.png", "humanRuRuLeft1.png", "humanRuRuLeft0.png", "humanRuRuLeft2.png"])
 wa_back = texture_asset.WalkTexture(["humanRuRuBack0.png", "humanRuRuBack1.png", "humanRuRuBack0.png", "humanRuRuBack2.png"])
 wa_right = texture_asset.WalkTexture(["humanRuRuRight0.png", "humanRuRuRight1.png", "humanRuRuRight0.png", "humanRuRuRight2.png"])
 
-PLAYER = Human(wa_front, wa_left, wa_back, wa_right)
+PLAYER = Human([1, 1], wa_front, wa_left, wa_back, wa_right)
