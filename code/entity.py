@@ -54,9 +54,9 @@ class Human(Entity):
             else:
                 self.animation = self.wa_back
 
-wa_front = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
-wa_left = texture_asset.WalkTexture(["humanRuRuLeft.png", "humanRuRuLeft1.png", "humanRuRuLeft.png", "humanRuRuLeft2.png"])
-wa_back = texture_asset.WalkTexture(["humanRuRuBack.png", "humanRuRuBack1.png", "humanRuRuBack.png", "humanRuRuBack2.png"])
-wa_right = texture_asset.WalkTexture(["humanRuRuRight.png", "humanRuRuRight1.png", "humanRuRuRight.png", "humanRuRuRight2.png"])
+wa_front = texture_asset.WalkTexture(["humanRuRuFront0.png", "humanRuRuFront1.png", "humanRuRuFront0.png", "humanRuRuFront2.png"])
+wa_left = texture_asset.WalkTexture(["humanRuRuLeft0.png", "humanRuRuLeft1.png", "humanRuRuLeft0.png", "humanRuRuLeft2.png"])
+wa_back = texture_asset.WalkTexture(["humanRuRuBack0.png", "humanRuRuBack1.png", "humanRuRuBack0.png", "humanRuRuBack2.png"])
+wa_right = texture_asset.WalkTexture(["humanRuRuRight0.png", "humanRuRuRight1.png", "humanRuRuRight0.png", "humanRuRuRight2.png"])
 
 PLAYER = Human(wa_front, wa_left, wa_back, wa_right)
