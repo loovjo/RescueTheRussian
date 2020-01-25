@@ -5,13 +5,12 @@ import texture_asset
 import time
 import random
 
-animation = texture_asset.WalkTexture(["humanAmAmFront0.png", "humanAmAmFront1.png", "humanAmAmFront0.png", "humanAmAmFront2.png"])
+animation = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
 
 world = world.World()
-human = entity.Human([0, 0], animation)
-world.entities.append(human)
+world.entities.append(entity.Human([0, 0], animation))
 
-width, height = size = 1080, 800
+width, height = size = 800, 600
 
 pygame.init()
 
@@ -22,6 +21,9 @@ pygame.display.set_caption("Rescue the russian")
 acc = [0, 0]
 
 last_time = time.time()
+last_dts = []
+
+time_since_debug_print = time.time()
 
 while True:
     for event in pygame.event.get():
@@ -48,7 +50,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    screen.fill((0, 0, 0))
+    screen.fill((255, 255, 255))
 
     world.draw(screen)
 
@@ -56,7 +58,15 @@ while True:
 
     dt = time.time() - last_time
     last_time = time.time()
+    last_dts.append(dt)
 
-    human.velocity[0] += acc[0] * dt * 20
-    human.velocity[1] += acc[1] * dt * 20
+    human = world.entities[world.get_player_idx()]
+    human.velocity[0] += acc[0] * dt * 50
+    human.velocity[1] += acc[1] * dt * 50
     world.update(dt)
+
+    if time.time() - time_since_debug_print > 1:
+        time_since_debug_print = time.time()
+        average_dt = sum(last_dts) / len(last_dts)
+        last_dts = []
+        print("FPS: {:.4}".format(1 / average_dt))

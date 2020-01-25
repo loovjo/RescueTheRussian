@@ -33,7 +33,7 @@ class TextureAsset:
 
         return scaled
 
-WALK_TEXTURE_SPEED = 0.1
+WALK_TEXTURE_SPEED = 0.05
 
 class WalkTexture(TextureAsset):
     def __init__(self, frame_names):
