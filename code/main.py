@@ -5,7 +5,7 @@ import texture_asset
 import time
 import random
 
-animation = texture_asset.WalkTexture(["humanAmAmFront0.png", "humanAmAmFront1.png", "humanAmAmFront0.png", "humanAmAmFront2.png"])
+animation = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
 
 world = world.World()
 human = entity.Human([0, 0], animation)
@@ -48,7 +48,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    screen.fill((0, 0, 0))
+    screen.fill((255, 255, 255))
 
     world.draw(screen)
 
