@@ -6,15 +6,14 @@ PIXELS_PER_UNIT = 100
 
 class World:
     def __init__(self):
-        self.tiles = [] # [x][y]
+        self.tiles = {} # {(x, y): Tile}
         for x in range(0, 7):
             row = []
             for y in range(0, 7):
                 here = GROUND
                 if x == 0 or x == 6 or y == 0 or y == 6:
                     here = WALL
-                row.append(here)
-            self.tiles.append(row)
+                self.tiles[(x, y)] = here
 
         self.entities = []
 
@@ -27,9 +26,8 @@ class World:
 
         self.unit_origin = self.entities[self.get_player_idx()].pos
 
-        for x in range(len(self.tiles)):
-            for y in range(len(self.tiles[x])):
-                self.tiles[x][y].draw(screen, self, (x, y))
+        for (x, y), tile in self.tiles.items():
+            tile.draw(screen, self, (x, y))
 
         for entity in self.entities:
             entity.draw(self, screen)
@@ -45,8 +43,8 @@ class World:
 
     def get_at(self, at):
         at = (int(at[0]), int(at[1]))
-        if 0 <= at[0] < len(self.tiles) and 0 <= at[1] < len(self.tiles[at[0]]):
-            return self.tiles[at[0]][at[1]]
+        if at in self.tiles:
+            return self.tiles[at]
         return None
 
     def transform_position(self, position):
