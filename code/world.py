@@ -11,7 +11,9 @@ class World:
             row = []
             for y in range(0, 8):
                 here = FLOOR_WOOD
-                if x == 0 or x == 7 or y == 0 or y == 7:
+                if x == 0 or x == 7 or y == 0:
+                    here = WALL_COBBLE
+                if y == 7:
                     here = WALL_PAPER
                 self.tiles[(x, y)] = here
 
