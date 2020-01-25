@@ -1,4 +1,4 @@
-from tile import GROUND
+from tile import GROUND, WALL
 from entity import Human
 
 PIXELS_PER_UNIT = 100
@@ -6,10 +6,13 @@ PIXELS_PER_UNIT = 100
 class World:
     def __init__(self):
         self.tiles = [] # [x][y]
-        for n in range(0, 50):
+        for x in range(0, 7):
             row = []
-            for m in range(0, 50):
-                row.append(GROUND)
+            for y in range(0, 7):
+                here = GROUND
+                if x == 0 or x == 6 or y == 0 or y == 6:
+                    here = WALL
+                row.append(here)
             self.tiles.append(row)
 
         self.entities = []
