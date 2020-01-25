@@ -1,27 +1,34 @@
 from tile import *
 from entity import Human
+from collections import defaultdict
 import math
 
 PIXELS_PER_UNIT = 100
 
 class World:
     def __init__(self):
-        self.tiles = {} # {(x, y): Tile}
-        for x in range(0, 8):
-            row = []
-            for y in range(0, 8):
-                here = FLOOR_WOOD
-                if x == 0 or x == 7 or y == 0:
-                    here = WALL_COBBLE
-                if y == 7:
-                    here = WALL_PAPER
-                self.tiles[(x, y)] = here
+        self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
+        self.make_cellar(0, 7, 0, 5)
 
         self.entities = []
 
         self.screen_width = [0, 0]
 
         self.unit_origin = [0, 0]
+
+    def make_cellar(self, xmin, xmax, ymin, ymax):
+        for x in range(xmin, xmax+1):
+            for y in range(ymin, ymax+1):
+                here = None
+
+                if x == xmin or x == xmax or y == ymin or y == ymax:
+                    if self.tiles[(x, y)] == VOID:
+                        here = WALL_COBBLE
+                elif self.tiles[(x, y)] == VOID:
+                    here = FLOOR_WOOD
+                if here != None:
+                    self.tiles[(x, y)] = here
+
 
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
