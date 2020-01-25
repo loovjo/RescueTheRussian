@@ -55,6 +55,10 @@ while True:
     pygame.display.flip()
 
     dt = time.time() - last_time
+    if dt < 1 / 60:
+        time.sleep(1 / 60 - dt)
+        dt = 1 / 60
+
     last_time = time.time()
     last_dts.append(dt)
 
@@ -68,3 +72,4 @@ while True:
         average_dt = sum(last_dts) / len(last_dts)
         last_dts = []
         print("FPS: {:.4}".format(1 / average_dt))
+
