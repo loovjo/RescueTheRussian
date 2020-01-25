@@ -45,6 +45,12 @@ class Wall(Tile):
     def walk_on(self, entity, world, at):
         return True
 
+class Fragile(Wall):
+    def walk_on(self, entity, world, at):
+        world.tiles[at] = FLOOR_WOOD
+        return True
+
 FLOOR_WOOD = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
 WALL_COBBLE = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
+WALL_PAPER = Fragile(ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
 VOID = Empty(SimpleTexture(TextureAsset(["empty.png"])))
