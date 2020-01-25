@@ -12,7 +12,7 @@ class World:
             for y in range(0, 8):
                 here = FLOOR_WOOD
                 if x == 0 or x == 7 or y == 0 or y == 7:
-                    here = WALL_COBBLE
+                    here = WALL_PAPER
                 self.tiles[(x, y)] = here
 
         self.entities = []
