@@ -57,6 +57,6 @@ while True:
     dt = time.time() - last_time
     last_time = time.time()
 
-    human.velocity[0] += acc[0] * dt * 20
-    human.velocity[1] += acc[1] * dt * 20
+    human.velocity[0] += acc[0] * dt * 50
+    human.velocity[1] += acc[1] * dt * 50
     world.update(dt)
