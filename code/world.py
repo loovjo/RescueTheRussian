@@ -1,4 +1,4 @@
-from tile import GROUND, WALL
+from tile import *
 from entity import Human
 import math
 
@@ -10,9 +10,9 @@ class World:
         for x in range(0, 7):
             row = []
             for y in range(0, 7):
-                here = GROUND
+                here = FLOOR_WOOD
                 if x == 0 or x == 6 or y == 0 or y == 6:
-                    here = WALL
+                    here = WALL_COBBLE
                 self.tiles[(x, y)] = here
 
         self.entities = []
@@ -45,7 +45,7 @@ class World:
         at = (int(at[0]), int(at[1]))
         if at in self.tiles:
             return self.tiles[at]
-        return None
+        return VOID
 
     def transform_position(self, position):
         return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]

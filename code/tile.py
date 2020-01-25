@@ -45,5 +45,6 @@ class Wall(Tile):
     def walk_on(self, entity):
         return True
 
-GROUND = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile: isinstance(tile, Empty)))
+FLOOR_WOOD = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
+WALL_COBBLE = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile: tile is FLOOR_WOOD))
+VOID = Empty(SimpleTexture(TextureAsset(["empty.png"])))
