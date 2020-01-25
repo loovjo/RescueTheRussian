@@ -1,4 +1,4 @@
-from Tile import Tile
+from tile import Tile
 
 PIXELS_PER_UNIT = 100
 

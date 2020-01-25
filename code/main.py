@@ -1,5 +1,5 @@
 import pygame
-import World
+import world
 import entity
 import texture_asset
 import time
