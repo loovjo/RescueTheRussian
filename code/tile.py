@@ -31,20 +31,20 @@ class Tile(ABC):
 
     # False = can walk through
     @abstractmethod
-    def walk_on(self, entity):
+    def walk_on(self, entity, world, at):
         pass
 
     def update(self, world, dt):
         pass
 
 class Empty(Tile):
-    def walk_on(self, entity):
+    def walk_on(self, entity, world, at):
         return False
 
 class Wall(Tile):
-    def walk_on(self, entity):
+    def walk_on(self, entity, world, at):
         return True
 
 FLOOR_WOOD = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL_COBBLE = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile: tile is FLOOR_WOOD))
+WALL_COBBLE = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
 VOID = Empty(SimpleTexture(TextureAsset(["empty.png"])))

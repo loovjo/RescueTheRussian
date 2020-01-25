@@ -44,8 +44,8 @@ class World:
     def get_at(self, at):
         at = (int(at[0]), int(at[1]))
         if at in self.tiles:
-            return self.tiles[at]
-        return VOID
+            return self.tiles[at], at
+        return VOID, at
 
     def transform_position(self, position):
         return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]

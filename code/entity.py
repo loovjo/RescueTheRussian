@@ -34,23 +34,23 @@ class Entity:
 
         self.animation.walked(total_velocity)
 
-        block_left = world.get_at((self.pos[0] - self.width / 2, self.pos[1]))
-        if block_left.walk_on(self):
+        block_left, at = world.get_at((self.pos[0] - self.width / 2, self.pos[1]))
+        if block_left.walk_on(self, world, at):
             self.pos[0] = math.ceil(self.pos[0] - self.width / 2) + self.width / 2
             self.velocity[0] *= -1
 
-        block_up = world.get_at((self.pos[0], self.pos[1] - self.height / 2))
-        if block_up.walk_on(self):
+        block_up, at = world.get_at((self.pos[0], self.pos[1] - self.height / 2))
+        if block_up.walk_on(self, world, at):
             self.pos[1] = math.ceil(self.pos[1] - self.height / 2) + self.height / 2
             self.velocity[1] *= -1
 
-        block_right = world.get_at((self.pos[0] + self.width / 2, self.pos[1]))
-        if block_right.walk_on(self):
+        block_right, at = world.get_at((self.pos[0] + self.width / 2, self.pos[1]))
+        if block_right.walk_on(self, world, at):
             self.pos[0] = math.floor(self.pos[0] + self.width / 2) - self.width / 2
             self.velocity[0] *= -1
 
-        block_down = world.get_at((self.pos[0], self.pos[1] + self.height / 2))
-        if block_down.walk_on(self):
+        block_down, at = world.get_at((self.pos[0], self.pos[1] + self.height / 2))
+        if block_down.walk_on(self, world, at):
             self.pos[1] = math.floor(self.pos[1] + self.height / 2) - self.height / 2
             self.velocity[1] *= -1
 
