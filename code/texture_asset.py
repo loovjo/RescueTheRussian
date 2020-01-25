@@ -92,3 +92,4 @@ class WalkTexture(TextureAsset):
         while self.frame_fpart > 1:
             self.current_frame += 1
             self.frame_fpart -= 1
+

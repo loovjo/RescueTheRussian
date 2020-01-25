@@ -5,10 +5,8 @@ import texture_asset
 import time
 import random
 
-animation = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
-
 world = world.World()
-world.entities.append(entity.Human([0, 0], animation))
+world.entities.append(entity.PLAYER)
 
 width, height = size = 800, 600
 

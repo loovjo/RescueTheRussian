@@ -1,3 +1,6 @@
+import math
+import texture_asset
+
 BOX_SIZE = 3
 
 SLOW_DOWN = 10
@@ -31,5 +34,29 @@ class Entity:
         screen.blit(surf, top_left_corner)
 
 class Human(Entity):
-    def __init__(self, pos, walking_animation):
-        super(Human, self).__init__(pos, walking_animation)
+    def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
+        super(Human, self).__init__(pos, wa_front)
+
+        self.wa_front = wa_front
+        self.wa_left = wa_left
+        self.wa_back = wa_back
+        self.wa_right = wa_right
+
+    def update(self, dt):
+        if abs(self.velocity[0]) > abs(velocity[1]):
+            if self.velocity[0] > 0:
+                self.animation = self.wa_right
+            else:
+                self.animation = self.wa_left
+        else:
+            if self.velocity[1] > 0:
+                self.animation = self.wa_up
+            else:
+                self.animation = self.wa_back
+
+wa_front = texture_asset.WalkTexture(["humanRuRuFront.png", "humanRuRuFront1.png", "humanRuRuFront.png", "humanRuRuFront2.png"])
+wa_left = texture_asset.WalkTexture(["humanRuRuLeft.png", "humanRuRuLeft1.png", "humanRuRuLeft.png", "humanRuRuLeft2.png"])
+wa_back = texture_asset.WalkTexture(["humanRuRuBack.png", "humanRuRuBack1.png", "humanRuRuBack.png", "humanRuRuBack2.png"])
+wa_right = texture_asset.WalkTexture(["humanRuRuRight.png", "humanRuRuRight1.png", "humanRuRuRight.png", "humanRuRuRight2.png"])
+
+PLAYER = Human(wa_front, wa_left, wa_back, wa_right)
