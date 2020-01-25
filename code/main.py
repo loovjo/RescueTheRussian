@@ -7,7 +7,7 @@ import random
 
 animation = texture_asset.WalkTexture(["humanAmAmFront0.png", "humanAmAmFront1.png", "humanAmAmFront0.png", "humanAmAmFront2.png"])
 
-world = World.World()
+world = world.World()
 human = entity.Human([0, 0], animation)
 world.entities.append(human)
 
@@ -22,9 +22,6 @@ pygame.display.set_caption("Rescue the russian")
 acc = [0, 0]
 
 last_time = time.time()
-
-black = pygame.image.load("logo.png")
-black = pygame.transform.scale(black, (screen.get_width(), screen.get_height()))
 
 while True:
     for event in pygame.event.get():
@@ -51,7 +48,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    screen.blit(black, (0, 0))
+    screen.fill((0, 0, 0))
 
     world.draw(screen)
 
