@@ -3,6 +3,38 @@ import pygame
 
 TEXTURE_ASSETS_FOLDER = "assets/textures/"
 
+def get_factor(color):
+    avg_color = (color.r + color.g + color.b) / 3
+    std_sqr = (color.r - avg_color) ** 2 + (color.g - avg_color) ** 2 + (color.b - avg_color) ** 2
+
+    return 1 / (std_sqr + 0.0001)
+
+def image_and(surface_1, surface_2):
+    result = surface_1.copy()
+    for y in range(surface_1.get_height()):
+        for x in range(surface_1.get_width()):
+            color_1 = surface_1.get_at((x, y))
+            color_2 = surface_2.get_at((x, y))
+
+            total_a = color_1.a + color_2.a
+            if total_a == 0:
+                continue
+
+            factor_1 = get_factor(color_1)
+            factor_2 = get_factor(color_2)
+
+            total_factor = factor_1 + factor_2
+
+            res_a = color_1.a * color_2.a / 256
+            res_r = (color_1.r * factor_1 + color_2.r * factor_2) / total_factor
+            res_g = (color_1.g * factor_1 + color_2.g * factor_2) / total_factor
+            res_b = (color_1.b * factor_1 + color_2.b * factor_2) / total_factor
+
+            res_col = pygame.Color(int(res_r), int(res_g), int(res_b), int(res_a))
+            result.set_at((x, y), res_col)
+
+    return result
+
 class TextureAsset:
     def __init__(self, frame_names):
         self.frames = []
@@ -18,18 +50,31 @@ class TextureAsset:
 
         self.resize_cached = {} # {(height, frame): surface}
 
-    def get_current_sized(self, height):
+    def get_current_sized(self, height, rotation_mask=1):
+        height = int(height)
         self.current_frame %= len(self.frames)
-        if (height, self.current_frame) in self.resize_cached:
-            return self.resize_cached[(height, self.current_frame)]
 
-        frame = self.frames[self.current_frame]
+        if (height, self.current_frame, rotation_mask) in self.resize_cached:
+            return self.resize_cached[(height, self.current_frame, rotation_mask)]
+
+        frame = None
+
+        for i in range(4):
+            if (rotation_mask >> i) & 1 == 1:
+                rotated = pygame.transform.rotate(self.frames[self.current_frame], i * 90)
+                if frame == None:
+                    frame = rotated
+                else:
+                    frame = image_and(frame, rotated)
+
+        if frame == None:
+            frame = self.frames[self.current_frame].copy()
+            frame.fill((0, 0, 0, 0))
 
         scaled_width = height / frame.get_height() * frame.get_width()
-
         scaled = pygame.transform.scale(frame, (int(scaled_width), int(height)))
 
-        self.resize_cached[(height, self.current_frame)] = scaled
+        self.resize_cached[(height, self.current_frame, rotation_mask)] = scaled
 
         return scaled
 

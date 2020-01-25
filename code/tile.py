@@ -4,7 +4,7 @@ import math
 
 import pygame
 from texture_asset import TextureAsset
-from tiletexture import SimpleTexture
+from tiletexture import *
 
 class Tile(ABC):
     def __init__(self, tile_texture):
@@ -25,7 +25,7 @@ class Tile(ABC):
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
-        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height)
+        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height, self.tile_texture.get_rotation(world, at))
 
         screen.blit(surf, top_left_corner)
 
@@ -46,4 +46,4 @@ class Wall(Tile):
         return True
 
 GROUND = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL = Wall(SimpleTexture(TextureAsset(["wallRedishStone.png"])))
+WALL = Wall(ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile: isinstance(tile, Empty)))

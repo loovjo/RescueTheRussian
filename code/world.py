@@ -42,5 +42,10 @@ class World:
         for entity in self.entities:
             entity.update(dt)
 
+    def get_at(self, at):
+        if 0 <= at[0] < len(self.tiles) and 0 <= at[1] < len(self.tiles[at[0]]):
+            return self.tiles[at[0]][at[1]]
+        return None
+
     def transform_position(self, position):
         return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
