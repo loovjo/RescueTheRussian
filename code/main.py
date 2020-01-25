@@ -25,12 +25,10 @@ last_time = time.time()
 
 black = pygame.image.load("logo.png")
 black = pygame.transform.scale(black, (screen.get_width(), screen.get_height()))
-black = black.convert()
-black.set_alpha(30)
 
 while True:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             exit()
 
         if event.type == pygame.KEYDOWN:
@@ -53,8 +51,7 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
-    if random.random() < 0.4:
-        screen.blit(black, (0, 0))
+    screen.blit(black, (0, 0))
 
     world.draw(screen)
 
