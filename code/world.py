@@ -1,5 +1,5 @@
 from tile import *
-from entity import Human
+from entity import Russian
 import math
 
 PIXELS_PER_UNIT = 100
@@ -36,7 +36,7 @@ class World:
 
     def get_player_idx(self):
         for i in range(len(self.entities)):
-            if isinstance(self.entities[i], Human):
+            if isinstance(self.entities[i], Russian):
                 return i
 
     def update(self, dt):
