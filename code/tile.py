@@ -46,4 +46,4 @@ class Wall(Tile):
         return True
 
 GROUND = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile: isinstance(tile, Empty)))
+WALL = Wall(ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile: isinstance(tile, Empty)))
