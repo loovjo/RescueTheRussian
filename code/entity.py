@@ -120,19 +120,19 @@ class Entity:
 
 
     def collides_with(self, other):
-        if other.pos[0] - other.width / 2 > self.pos[0] + self.width / 2:
+        if other.pos[0] - other.width / 2 >= self.pos[0] + self.width / 2:
             # other left edge after our right edge
             return False
 
-        if other.pos[0] + other.width / 2 < self.pos[0] - self.width / 2:
+        if other.pos[0] + other.width / 2 <= self.pos[0] - self.width / 2:
             # other right edge before our left
             return False
 
-        if other.pos[1] - other.height / 2 > self.pos[1] + self.height / 2:
+        if other.pos[1] - other.height / 2 >= self.pos[1] + self.height / 2:
             # etc
             return False
 
-        if other.pos[1] + other.height / 2 < self.pos[1] - self.height / 2:
+        if other.pos[1] + other.height / 2 <= self.pos[1] - self.height / 2:
             # etc
             return False
 
