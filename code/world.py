@@ -3,7 +3,7 @@ from collections import defaultdict
 from entity import Russian
 import math
 
-PIXELS_PER_UNIT = 100
+PIXELS_PER_UNIT = 70
 
 class World:
     def __init__(self):
