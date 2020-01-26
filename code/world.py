@@ -25,7 +25,7 @@ class World:
 
                 if x == xmin or x == xmax or y == ymin or y == ymax:
                     if self.tiles[(x, y)] == VOID:
-                        here = WALL_PAPER
+                        here = WALL_COBBLE
                 elif self.tiles[(x, y)] == VOID:
                     here = FLOOR_WOOD
                 if here != None:
