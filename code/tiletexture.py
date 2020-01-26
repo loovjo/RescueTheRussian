@@ -17,7 +17,7 @@ class SimpleTexture(TileTexture):
         return self.texture_asset
 
     def get_rotation(self, world, at):
-        return 1
+        return (1, )
 
 
 PRIMARY_CONNECTIONS = [
@@ -27,7 +27,7 @@ PRIMARY_CONNECTIONS = [
     ((-1, 0),  0b1000),
 ]
 
-SECONDARY_CONNECTIONS = [
+CORNER_CONNECTIONS = [
     ((1, 1),   0b0011),
     ((1, -1),  0b0110),
     ((-1, -1), 0b1100),
@@ -43,20 +43,17 @@ class ConnectingTexture(TileTexture):
         return self.texture_asset
 
     def get_rotation(self, world, at):
-        rmask = 0
+        rotations = []
         for delta, mask in PRIMARY_CONNECTIONS:
             rat = (at[0] + delta[0], at[1] + delta[1])
             here = world.get_at(rat)
             if self.p_connect(here):
-                rmask |= mask
+                rotations.append(mask)
 
-        if rmask != 0:
-            return rmask
-
-        for delta, mask in SECONDARY_CONNECTIONS:
+        for delta, mask in CORNER_CONNECTIONS:
             rat = (at[0] + delta[0], at[1] + delta[1])
             here = world.get_at(rat)
             if self.p_connect(here):
-                rmask |= mask
+                rotations.append(mask)
 
-        return rmask
+        return tuple(rotations)

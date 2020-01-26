@@ -5,7 +5,7 @@ BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
-MIN_VELOCITY = 0.2
+MIN_VELOCITY = 0.04
 
 class Entity:
     def __init__(self, pos, animation):
@@ -21,7 +21,7 @@ class Entity:
         self.velocity[0] -= self.velocity[0] * dt * SLOW_DOWN
         self.velocity[1] -= self.velocity[1] * dt * SLOW_DOWN
 
-        if self.velocity[0]**2 + self.velocity[1]**2 < MIN_VELOCITY**2:
+        if self.velocity[0]**2 + self.velocity[1]**2 < MIN_VELOCITY:
             self.velocity[0] = 0
             self.velocity[1] = 0
             self.animation = self.wa_front
