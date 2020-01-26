@@ -62,7 +62,7 @@ while True:
     last_time = time.time()
     last_dts.append(dt)
 
-    human = world.entities[world.get_player_idx()]
+    human = world.entities[0]
     human.velocity[0] += acc[0] * dt * 50
     human.velocity[1] += acc[1] * dt * 50
     world.update(dt)

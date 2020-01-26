@@ -3,14 +3,12 @@ from collections import defaultdict
 from entity import Russian
 import math
 
+from RescueTheRussian.code.entity import *
+
 PIXELS_PER_UNIT = 100
 
 class World:
     def __init__(self):
-        self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
-        self.make_cellar(0, 7, 0, 5)
-        self.make_cellar(7, 20, -4, 20)
-        self.replace_area(7, 7, 1, 4, WALL_PAPER)
 
         self.entities = []
 
@@ -18,7 +16,23 @@ class World:
 
         self.unit_origin = [0, 0]
 
-    def make_cellar(self, xmin, xmax, ymin, ymax):
+        self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
+        self.make_cellar(0, 0, "R")
+        self.make_cellar(9, 2, "A")
+        self.replace_area(7, 0, 1, 4, WALL_PAPER)
+
+    def make_cellar(self, xmin, ymin, nationality):
+        if nationality == "S":
+            xmax = xmin + 10
+            ymax = xmin + 7
+        elif nationality == "A":
+            xmax = xmin + 7
+            ymax = xmin + 5
+            self.entities.append(Russian([xmin +3, xmin + 4], wa_front, wa_left, wa_back, wa_right))
+
+        else:
+            xmax = xmin + 8
+            ymax = xmin + 7
         for x in range(xmin, xmax+1):
             for y in range(ymin, ymax+1):
                 here = None
@@ -39,7 +53,7 @@ class World:
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
 
-        self.unit_origin = self.entities[self.get_player_idx()].pos
+        self.unit_origin = self.entities[0].pos
 
         for (x, y), tile in self.tiles.items():
             tile.draw(screen, self, (x, y))
@@ -49,7 +63,9 @@ class World:
 
     def get_player_idx(self):
         for i in range(len(self.entities)):
+            print(i, self.entities[i])
             if isinstance(self.entities[i], Russian):
+                print("hej")
                 return i
 
     def update(self, dt):
