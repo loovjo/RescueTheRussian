@@ -90,6 +90,12 @@ class Human(Entity):
 class Russian(Human):
     pass
 
+class American(Human):
+    def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
+        super(American, self).__init__(pos, wa_front, wa_left, wa_back, wa_right)
+        self.width = 0.6
+        self.height = 0.6
+
 wa_ru_front = texture_asset.WalkTexture(["humanRuRuFront0.png", "humanRuRuFront1.png", "humanRuRuFront0.png", "humanRuRuFront2.png"])
 wa_ru_left = texture_asset.WalkTexture(["humanRuRuLeft0.png", "humanRuRuLeft1.png", "humanRuRuLeft0.png", "humanRuRuLeft2.png"])
 wa_ru_back = texture_asset.WalkTexture(["humanRuRuBack0.png", "humanRuRuBack1.png", "humanRuRuBack0.png", "humanRuRuBack2.png"])
@@ -104,4 +110,4 @@ wa_am_back = texture_asset.WalkTexture(["humanAmAmBack0.png", "humanAmAmBack1.pn
 wa_am_right = texture_asset.WalkTexture(["humanAmAmRight0.png", "humanAmAmRight1.png", "humanAmAmRight0.png", "humanAmAmRight2.png"])
 
 def make_american(pos):
-    return Human(pos, wa_am_front, wa_am_left, wa_am_back, wa_am_right)
+    return American(pos, wa_am_front, wa_am_left, wa_am_back, wa_am_right)
