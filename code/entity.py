@@ -1,11 +1,14 @@
 import math
 import texture_asset
+import pygame
 
 BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
 MIN_VELOCITY = 0.04
+
+DRAW_DEBUG_HITBOXES = False
 
 class Entity:
     def __init__(self, pos, animation):
@@ -56,13 +59,34 @@ class Entity:
 
     def draw(self, world, screen):
         top_left_corner = world.transform_position((self.pos[0] - 0.5, self.pos[1] - 0.5))
-        bottom_left_corner = world.transform_position([self.pos[0] - 0.5, self.pos[1] + 0.5])
+        bottom_right_corner = world.transform_position([self.pos[0] + 0.5, self.pos[1] + 0.5])
 
-        height = int(bottom_left_corner[1] - top_left_corner[1])
+        height = int(bottom_right_corner[1] - top_left_corner[1])
 
         surf = self.animation.get_current_sized(height)
 
         screen.blit(surf, top_left_corner)
+
+        if DRAW_DEBUG_HITBOXES:
+            texture_rect = pygame.Rect(
+                *top_left_corner,
+                bottom_right_corner[0] - top_left_corner[0],
+                bottom_right_corner[1] - top_left_corner[1],
+            )
+
+            pygame.draw.rect(screen, (255, 0, 0), texture_rect, 1)
+
+            coll_tlc = world.transform_position((self.pos[0] - self.width / 2, self.pos[1] - self.height / 2))
+            coll_brc = world.transform_position((self.pos[0] + self.width / 2, self.pos[1] + self.height / 2))
+
+            collision_rect = pygame.Rect(
+                *coll_tlc,
+                coll_brc[0] - coll_tlc[0],
+                coll_brc[1] - coll_tlc[1],
+            )
+
+            pygame.draw.rect(screen, (0, 255, 0), collision_rect, 1)
+
 
 class Human(Entity):
     def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
@@ -94,7 +118,7 @@ class American(Human):
     def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
         super(American, self).__init__(pos, wa_front, wa_left, wa_back, wa_right)
         self.width = 0.6
-        self.height = 0.6
+        self.height = 0.8
 
 wa_ru_front = texture_asset.WalkTexture(["humanRuRuFront0.png", "humanRuRuFront1.png", "humanRuRuFront0.png", "humanRuRuFront2.png"])
 wa_ru_left = texture_asset.WalkTexture(["humanRuRuLeft0.png", "humanRuRuLeft1.png", "humanRuRuLeft0.png", "humanRuRuLeft2.png"])
