@@ -98,14 +98,20 @@ class Entity:
             delta_position_x /= distance
             delta_position_y /= distance
 
+            my_delta_x = other.mass * delta_position_x / (self.mass + other.mass)
+            my_delta_y = other.mass * delta_position_y / (self.mass + other.mass)
+
+            other_delta_x = self.mass * delta_position_x / (self.mass + other.mass)
+            other_delta_y = self.mass * delta_position_y / (self.mass + other.mass)
+
             # Binary search for distance for no collision
             max_colliding_distance = 0
-            min_noncolliding_distance = self.width + self.height + other.width + other.height
+            min_noncolliding_distance = 2 * (self.width + self.height + other.width + other.height)
             for i in range(20):
                 distance_here = (max_colliding_distance + min_noncolliding_distance) / 2
 
-                self.pos = [center_of_mass_x + delta_position_x * distance_here, center_of_mass_y + delta_position_y * distance_here]
-                other.pos = [center_of_mass_x - delta_position_x * distance_here, center_of_mass_y - delta_position_y * distance_here]
+                self.pos = [center_of_mass_x + my_delta_x * distance_here, center_of_mass_y + my_delta_y * distance_here]
+                other.pos = [center_of_mass_x - other_delta_x * distance_here, center_of_mass_y - other_delta_y * distance_here]
 
                 if self.collides_with(other):
                     max_colliding_distance = distance_here
@@ -190,7 +196,7 @@ class Russian(Human):
     def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
         super(Russian, self).__init__(pos, wa_front, wa_left, wa_back, wa_right)
 
-        self.weight = 50
+        self.mass = 50
 
 class American(Human):
     def __init__(self, pos, wa_front, wa_left, wa_back, wa_right):
@@ -198,7 +204,7 @@ class American(Human):
         self.width = 0.6
         self.height = 0.8
 
-        self.weight = 100
+        self.mass = 100
 
 wa_ru_front = texture_asset.WalkTexture(["humanRuRuFront0.png", "humanRuRuFront1.png", "humanRuRuFront0.png", "humanRuRuFront2.png"])
 wa_ru_left = texture_asset.WalkTexture(["humanRuRuLeft0.png", "humanRuRuLeft1.png", "humanRuRuLeft0.png", "humanRuRuLeft2.png"])
