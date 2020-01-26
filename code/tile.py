@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 import math
+import random
 
 import pygame
 from texture_asset import TextureAsset
@@ -45,12 +46,20 @@ class Wall(Tile):
     def walk_on(self, entity, world, at):
         return True
 
+BREAK_VELOCITY_MIN = 2
+
 class Fragile(Wall):
+    def __init__(self, break_prec, tile_texture):
+        super().__init__(tile_texture)
+        self.break_prec = break_prec
+
     def walk_on(self, entity, world, at):
-        world.tiles[at] = FLOOR_WOOD
+        if entity.velocity[0] ** 2 + entity.velocity[1] ** 2 > BREAK_VELOCITY_MIN ** 2:
+            if random.random() < self.break_prec:
+                world.tiles[at] = FLOOR_WOOD
         return True
 
 FLOOR_WOOD = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL_COBBLE = Wall(ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
-WALL_PAPER = Fragile(ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
+WALL_COBBLE = Fragile(0.02, ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
+WALL_PAPER = Fragile(1., ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
 VOID = Empty(SimpleTexture(TextureAsset(["empty.png"])))
