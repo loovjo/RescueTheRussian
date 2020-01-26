@@ -1,6 +1,6 @@
 from tile import *
 from collections import defaultdict
-from entity import Russian
+from entity import *
 import math
 
 PIXELS_PER_UNIT = 70

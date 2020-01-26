@@ -61,6 +61,13 @@ def image_or(surface_1, surface_2):
 
     return result
 
+class RenderOptions:
+    def __init__(self, rotation_masks):
+        self.rotation_masks = rotation_masks
+
+    def __hash__(self):
+        return hash(self.rotation_masks)
+
 class TextureAsset:
     def __init__(self, frame_names):
         self.frames = []
@@ -77,16 +84,16 @@ class TextureAsset:
         self.resize_cached = {} # {(height, frame): surface}
 
     # Rotation masks is list of bitmassk rotations to be anded, where every result is ored
-    def get_current_sized(self, height, rotation_masks=(1, )):
+    def get_current_sized(self, height, render_options=RenderOptions((1, ))):
         height = int(height)
         self.current_frame %= len(self.frames)
 
-        if (height, self.current_frame, rotation_masks) in self.resize_cached:
-            return self.resize_cached[(height, self.current_frame, rotation_masks)]
+        if (height, self.current_frame, hash(render_options)) in self.resize_cached:
+            return self.resize_cached[(height, self.current_frame, hash(render_options))]
 
         frame = None
 
-        for rotation_mask in rotation_masks:
+        for rotation_mask in render_options.rotation_masks:
             here = None
             for i in range(4):
                 if (rotation_mask >> i) & 1 == 1:
@@ -108,7 +115,7 @@ class TextureAsset:
         scaled_width = height / frame.get_height() * frame.get_width()
         scaled = pygame.transform.scale(frame, (int(scaled_width), int(height)))
 
-        self.resize_cached[(height, self.current_frame, rotation_masks)] = scaled
+        self.resize_cached[(height, self.current_frame, hash(render_options))] = scaled
 
         return scaled
 
