@@ -57,7 +57,7 @@ class World:
             entity.update(self, dt)
 
     def get_at(self, at):
-        at = (int(at[0]), int(at[1]))
+        at = (int(math.floor(at[0])), int(math.floor(at[1])))
         if at in self.tiles:
             return self.tiles[at], at
         return VOID, at
