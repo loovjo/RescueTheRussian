@@ -5,7 +5,7 @@ import math
 
 from RescueTheRussian.code.entity import *
 
-PIXELS_PER_UNIT = 100
+PIXELS_PER_UNIT = 70
 
 class World:
     def __init__(self):
