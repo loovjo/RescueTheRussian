@@ -9,6 +9,8 @@ class World:
     def __init__(self):
         self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
         self.make_cellar(0, 7, 0, 5)
+        self.make_cellar(7, 20, -4, 20)
+        self.replace_area(7, 7, 1, 4, WALL_PAPER)
 
         self.entities = []
 
@@ -29,6 +31,10 @@ class World:
                 if here != None:
                     self.tiles[(x, y)] = here
 
+    def replace_area(self, xmin, xmax, ymin, ymax, newTile):
+        for x in range(xmin, xmax+1):
+            for y in range(ymin, ymax+1):
+                self.tiles[(x, y)] = newTile
 
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
