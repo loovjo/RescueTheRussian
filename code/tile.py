@@ -54,7 +54,11 @@ class Fragile(Wall):
         self.break_prec = break_prec
 
     def walk_on(self, entity, world, at):
-        if entity.velocity[0] ** 2 + entity.velocity[1] ** 2 > BREAK_VELOCITY_MIN ** 2:
+        is_above_or_below = abs(entity.pos[1] - at[1] - 0.5) > abs(entity.pos[0] - at[0] - 0.5)
+        vel_to_check = entity.velocity[1] if is_above_or_below else entity.velocity[0]
+
+        if abs(vel_to_check) > BREAK_VELOCITY_MIN:
+            print("bonk")
             if random.random() < self.break_prec:
                 world.tiles[at] = FLOOR_WOOD
         return True
