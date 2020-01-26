@@ -102,4 +102,4 @@ wa_left = texture_asset.WalkTexture(["humanAmAmLeft0.png", "humanAmAmLeft1.png",
 wa_back = texture_asset.WalkTexture(["humanAmAmBack0.png", "humanAmAmBack1.png", "humanAmAmBack0.png", "humanAmAmBack2.png"])
 wa_right = texture_asset.WalkTexture(["humanAmAmRight0.png", "humanAmAmRight1.png", "humanAmAmRight0.png", "humanAmAmRight2.png"])
 
-PLAYER = Russian([2, 2], wa_front, wa_left, wa_back, wa_right)
+AMERICAN = Human([2, 2], wa_front, wa_left, wa_back, wa_right)
