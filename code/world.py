@@ -3,6 +3,7 @@ from collections import defaultdict
 from entity import Russian
 import math
 
+from RescueTheRussian.code import entity
 from RescueTheRussian.code.entity import *
 
 PIXELS_PER_UNIT = 70
@@ -28,7 +29,7 @@ class World:
         elif nationality == "A":
             xmax = xmin + 7
             ymax = xmin + 5
-            self.entities.append(Russian([xmin +3, xmin + 4], wa_front, wa_left, wa_back, wa_right))
+            self.entities.append(American([xmin +3, xmin + 4], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
 
         else:
             xmax = xmin + 8
@@ -53,7 +54,7 @@ class World:
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
 
-        self.unit_origin = self.entities[0].pos
+        self.unit_origin = self.entities[self.get_player_idx()].pos
 
         for (x, y), tile in self.tiles.items():
             tile.draw(screen, self, (x, y))
@@ -64,7 +65,7 @@ class World:
     def get_player_idx(self):
         for i in range(len(self.entities)):
             print(i, self.entities[i])
-            if isinstance(self.entities[i], Russian):
+            if isinstance(self.entities[i], entity.Russian):
                 print("hej")
                 return i
 
