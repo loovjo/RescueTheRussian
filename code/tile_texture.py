@@ -58,7 +58,7 @@ class ConnectingTexture(TileTexture):
                 rotations.append(mask)
 
         if rotations == []:
-            rotations = [1, 2, 4, 8]
+            rotations = [15, 15, 15, 15]
 
         self.render_options = RenderOptions(tuple(rotations))
 
