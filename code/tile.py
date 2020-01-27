@@ -26,7 +26,8 @@ class Tile(ABC):
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
-        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height, self.tile_texture.get_render_options(world, at))
+        asset = self.tile_texture.get_texture_asset(world, at)
+        surf = asset.render(height, self.tile_texture.get_render_options(world, at))
 
         screen.blit(surf, top_left_corner)
 
@@ -63,7 +64,7 @@ class Fragile(Wall):
                 world.tiles[at] = FLOOR_WOOD
         return True
 
-FLOOR_WOOD = Empty(SimpleTexture(TextureAsset(["floorWood.png"])))
-WALL_COBBLE = Fragile(0.02, ConnectingTexture(TextureAsset(["wallCobble.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
-WALL_PAPER = Fragile(1., ConnectingTexture(TextureAsset(["wallPaper.png"]), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
-VOID = Empty(SimpleTexture(TextureAsset(["empty.png"])))
+FLOOR_WOOD = Empty(SimpleTexture(TextureAsset("floorWood.png")))
+WALL_COBBLE = Fragile(0.02, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
+WALL_PAPER = Fragile(1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
+VOID = Empty(SimpleTexture(TextureAsset("empty.png")))

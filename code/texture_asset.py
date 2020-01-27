@@ -68,69 +68,53 @@ class RenderOptions:
     def __hash__(self):
         return hash(self.rotation_masks)
 
+RENDERED_CACHE = {} # {(name, height, hash(renderopts)): pygame surface}
+
 class TextureAsset:
-    def __init__(self, frame_names):
-        self.frames = []
+    def __init__(self, frame_name):
+        print("Loading", frame_name)
+        path = os.path.join(TEXTURE_ASSETS_FOLDER, frame_name)
+        self.original_surface = pygame.image.load(path)
 
-        for file_name in frame_names:
-            path = os.path.join(TEXTURE_ASSETS_FOLDER, file_name)
-
-            print("Loading texture", path)
-
-            self.frames.append(pygame.image.load(path))
-
-        self.current_frame = 0
-
-        self.resize_cached = {} # {(height, frame): surface}
+        self.name = frame_name
 
     # Rotation masks is list of bitmassk rotations to be anded, where every result is ored
-    def get_current_sized(self, height, render_options=RenderOptions((1, ))):
+    def render(self, height, render_options):
         height = int(height)
-        self.current_frame %= len(self.frames)
 
-        if (height, self.current_frame, hash(render_options)) in self.resize_cached:
-            return self.resize_cached[(height, self.current_frame, hash(render_options))]
+        if (self.name, height, hash(render_options)) in RENDERED_CACHE:
+            return RENDERED_CACHE[(self.name, height, hash(render_options))]
 
-        frame = None
+        rendered = None
 
         for rotation_mask in render_options.rotation_masks:
             here = None
             for i in range(4):
                 if (rotation_mask >> i) & 1 == 1:
-                    rotated = pygame.transform.rotate(self.frames[self.current_frame], i * 90)
+                    rotated = pygame.transform.rotate(self.original_surface, i * 90)
                     if here == None:
                         here = rotated
                     else:
                         here = image_and(here, rotated)
 
             if here == None:
-                here = self.frames[self.current_frame].copy()
+                here = self.original_surface.copy()
                 here.fill((0, 0, 0, 0))
 
-            if frame == None:
-                frame = here
+            if rendered == None:
+                rendered = here
             else:
-                frame = image_or(frame, here)
+                rendered = image_or(rendered, here)
 
-        scaled_width = height / frame.get_height() * frame.get_width()
-        scaled = pygame.transform.scale(frame, (int(scaled_width), int(height)))
+        if rendered == None:
+            rendered = self.original_surface.copy()
+            # Should we do anything here?
+            rendered.fill((0, 0, 0, 0))
 
-        self.resize_cached[(height, self.current_frame, hash(render_options))] = scaled
+        scaled_width = height / rendered.get_height() * rendered.get_width()
+        scaled = pygame.transform.scale(rendered, (int(scaled_width), int(height)))
+
+        RENDERED_CACHE[(self.name, height, hash(render_options))] = scaled
 
         return scaled
-
-WALK_TEXTURE_SPEED = 0.05
-
-class WalkTexture(TextureAsset):
-    def __init__(self, frame_names):
-        super(WalkTexture, self).__init__(frame_names)
-
-        self.frame_fpart = 0
-
-    def walked(self, distance):
-        self.frame_fpart += distance * WALK_TEXTURE_SPEED
-
-        while self.frame_fpart > 1:
-            self.current_frame += 1
-            self.frame_fpart -= 1
 

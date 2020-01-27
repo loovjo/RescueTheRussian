@@ -19,7 +19,7 @@ class World:
         self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
         self.make_cellar(9, 2, "A")
-        self.replace_area(7, 0, 1, 4, WALL_PAPER)
+        self.replace_area(7, 7, 1, 4, WALL_PAPER)
 
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
@@ -28,8 +28,8 @@ class World:
         elif nationality == "A":
             xmax = xmin + 7
             ymax = ymin + 5
-            self.entities.append(American([xmin + 3, ymin + 4], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
-            self.entities.append(American([xmin +5, ymin + 3], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
+            self.entities.append(make_american([xmin + 3, ymin + 4]))
+            self.entities.append(make_american([xmin +5, ymin + 3]))
 
 
         else:
