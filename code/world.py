@@ -16,7 +16,7 @@ class World:
 
         self.entities.append(make_player([2, 2]))
 
-        self.tiles = defaultdict(VOID) # {(x, y): Tile}
+        self.tiles = defaultdict(lambda: VOID()) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
         self.make_cellar(8, 2, "A")
         self.replace_area(8, 8, 3, 4, WALL_PAPER())
@@ -79,7 +79,7 @@ class World:
         at = (int(math.floor(at[0])), int(math.floor(at[1])))
         if at in self.tiles:
             return self.tiles[at], at
-        return VOID, at
+        return VOID(), at
 
     def transform_position(self, position):
         return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
