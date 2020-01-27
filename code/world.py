@@ -17,6 +17,8 @@ class World:
 
         self.unit_origin = [0, 0]
 
+        self.entities.append(entity.make_player([2, 2]))
+
         self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
         self.make_cellar(9, 2, "A")
@@ -25,15 +27,17 @@ class World:
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
             xmax = xmin + 10
-            ymax = xmin + 7
+            ymax = ymin + 7
         elif nationality == "A":
             xmax = xmin + 7
-            ymax = xmin + 5
-            self.entities.append(American([xmin +3, xmin + 4], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
+            ymax = ymin + 5
+            self.entities.append(American([xmin + 3, ymin + 4], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
+            self.entities.append(American([xmin +5, ymin + 3], wa_am_front, wa_am_left, wa_am_back, wa_am_right))
+
 
         else:
             xmax = xmin + 8
-            ymax = xmin + 7
+            ymax = ymin + 7
         for x in range(xmin, xmax+1):
             for y in range(ymin, ymax+1):
                 here = None
@@ -54,7 +58,7 @@ class World:
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
 
-        self.unit_origin = self.entities[self.get_player_idx()].pos
+        self.unit_origin = self.entities[0].pos
 
         for (x, y), tile in self.tiles.items():
             tile.draw(screen, self, (x, y))
@@ -65,7 +69,7 @@ class World:
     def get_player_idx(self):
         for i in range(len(self.entities)):
             print(i, self.entities[i])
-            if isinstance(self.entities[i], entity.Russian):
+            if isinstance(self.entities[i], Russian):
                 print("hej")
                 return i
 

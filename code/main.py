@@ -6,8 +6,7 @@ import time
 import random
 
 world = world.World()
-world.entities.append(entity.make_player([2, 2]))
-world.entities.append(entity.make_american([8.5, 5]))
+#world.entities.append(entity.make_player([2, 2]))
 
 width, height = size = 800, 600
 
