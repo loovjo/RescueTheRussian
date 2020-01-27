@@ -18,8 +18,8 @@ class World:
 
         self.tiles = defaultdict(VOID) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
-        self.make_cellar(9, 2, "A")
-        self.replace_area(7, 7, 1, 4, WALL_PAPER())
+        self.make_cellar(8, 2, "A")
+        self.replace_area(8, 8, 3, 4, WALL_PAPER())
 
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
@@ -65,9 +65,7 @@ class World:
 
     def get_player_idx(self):
         for i in range(len(self.entities)):
-            print(i, self.entities[i])
             if isinstance(self.entities[i], Russian):
-                print("hej")
                 return i
 
     def update(self, dt):

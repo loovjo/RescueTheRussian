@@ -48,24 +48,30 @@ while True:
             if event.key == pygame.K_DOWN:
                 acc[1] -= 1
 
+    dt = time.time() - last_time
+    last_time = time.time()
+    if dt < 1 / 60:
+        time.sleep(1 / 60 - dt)
+        dt = 1 / 60
+
+
+    human = world.entities[world.get_player_idx()]
+    human.velocity[0] += acc[0] * dt * 50
+    human.velocity[1] += acc[1] * dt * 50
+
+    udt = dt
+    while udt > 1 / 60:
+        world.update(1 / 60)
+        udt -= 1 / 60
+    world.update(udt)
+
     screen.fill((0, 0, 0))
 
     world.draw(screen)
 
     pygame.display.flip()
 
-    dt = time.time() - last_time
-    if dt < 1 / 60:
-        time.sleep(1 / 60 - dt)
-        dt = 1 / 60
-
-    last_time = time.time()
     last_dts.append(dt)
-
-    human = world.entities[0]
-    human.velocity[0] += acc[0] * dt * 50
-    human.velocity[1] += acc[1] * dt * 50
-    world.update(dt)
 
     if time.time() - time_since_debug_print > 1:
         time_since_debug_print = time.time()
