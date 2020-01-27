@@ -3,9 +3,6 @@ from collections import defaultdict
 from entity import *
 import math
 
-from RescueTheRussian.code import entity
-from RescueTheRussian.code.entity import *
-
 PIXELS_PER_UNIT = 70
 
 class World:
@@ -17,7 +14,7 @@ class World:
 
         self.unit_origin = [0, 0]
 
-        self.entities.append(entity.make_player([2, 2]))
+        self.entities.append(make_player([2, 2]))
 
         self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
