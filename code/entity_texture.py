@@ -11,7 +11,7 @@ class EntityTexture(DynamicTexture):
         self.current_frame = 0.0
         self.wa_speed = wa_speed
 
-    def get_texture(self):
+    def get_texture_asset(self):
         return self.frames[self.current_direction][int(self.current_frame)]
 
     def entity_moved(self, velocity):

@@ -4,7 +4,7 @@ import texture_asset
 
 class DynamicTexture(ABC):
     @abstractmethod
-    def get_texture(self):
+    def get_texture_asset(self):
         pass
 
     @abstractmethod
@@ -12,5 +12,5 @@ class DynamicTexture(ABC):
         pass
 
     def render(self, height):
-        return self.get_texture().render(height, self.get_render_options())
+        return self.get_texture_asset().render(height, self.get_render_options())
 

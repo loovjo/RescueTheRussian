@@ -12,7 +12,7 @@ class SimpleTexture(TileTexture):
     def __init__(self, texture_asset):
         self.texture_asset = texture_asset
 
-    def get_texture(self):
+    def get_texture_asset(self):
         return self.texture_asset
 
     def get_render_options(self):
@@ -62,7 +62,7 @@ class ConnectingTexture(TileTexture):
 
         self.render_options = RenderOptions(tuple(rotations))
 
-    def get_texture(self):
+    def get_texture_asset(self):
         return self.texture_asset
 
     def get_render_options(self):
