@@ -68,15 +68,20 @@ class RenderOptions:
     def __hash__(self):
         return hash(self.rotation_masks)
 
+TEXTURE_CACHE = {} # (name: pygame surface)
 RENDERED_CACHE = {} # {(name, height, hash(renderopts)): pygame surface}
 
 class TextureAsset:
     def __init__(self, frame_name):
-        print("Loading", frame_name)
-        path = os.path.join(TEXTURE_ASSETS_FOLDER, frame_name)
-        self.original_surface = pygame.image.load(path)
+        global TEXTURE_CACHE
 
         self.name = frame_name
+
+        if self.name not in TEXTURE_CACHE:
+            path = os.path.join(TEXTURE_ASSETS_FOLDER, frame_name)
+            print("Loading", path, "(", self.name, ")")
+            TEXTURE_CACHE[self.name] = pygame.image.load(path)
+
 
     # Rotation masks is list of bitmassk rotations to be anded, where every result is ored
     def render(self, height, render_options):
@@ -85,20 +90,22 @@ class TextureAsset:
         if (self.name, height, hash(render_options)) in RENDERED_CACHE:
             return RENDERED_CACHE[(self.name, height, hash(render_options))]
 
+        original_surface = TEXTURE_CACHE[self.name]
+
         rendered = None
 
         for rotation_mask in render_options.rotation_masks:
             here = None
             for i in range(4):
                 if (rotation_mask >> i) & 1 == 1:
-                    rotated = pygame.transform.rotate(self.original_surface, i * 90)
+                    rotated = pygame.transform.rotate(original_surface, i * 90)
                     if here == None:
                         here = rotated
                     else:
                         here = image_and(here, rotated)
 
             if here == None:
-                here = self.original_surface.copy()
+                here = original_surface.copy()
                 here.fill((0, 0, 0, 0))
 
             if rendered == None:
@@ -107,7 +114,7 @@ class TextureAsset:
                 rendered = image_or(rendered, here)
 
         if rendered == None:
-            rendered = self.original_surface.copy()
+            rendered = original_surface.copy()
             # Should we do anything here?
             rendered.fill((0, 0, 0, 0))
 

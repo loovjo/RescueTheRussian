@@ -1,5 +1,5 @@
 import math
-import dynamic_texture
+from entity_texture import EntityTexture
 import pygame
 
 BOX_SIZE = 3
@@ -12,7 +12,7 @@ BOUNCE_COEFFICIENT = 0.7
 
 class Entity:
     def __init__(self, pos, texture):
-        if not isinstance(texture, dynamic_texture.EntityTexture):
+        if not isinstance(texture, EntityTexture):
             raise TypeError("Texture must be an EntityTexture")
 
         self.pos = pos
@@ -181,7 +181,7 @@ class American(Human):
 
 
 def make_player(pos):
-    return Russian(pos, dynamic_texture.EntityTexture.load_walking_texture("RuRu"))
+    return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
 
 def make_american(pos):
-    return American(pos, dynamic_texture.EntityTexture.load_walking_texture("AmAm"))
+    return American(pos, EntityTexture.load_walking_texture("AmAm"))

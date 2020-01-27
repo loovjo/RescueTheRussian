@@ -1,24 +1,25 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from dynamic_texture import DynamicTexture
 from texture_asset import RenderOptions
 
-class TileTexture(ABC):
+class TileTexture(DynamicTexture):
     @abstractmethod
-    def get_texture_asset(self, world, at):
-        pass
-
-    @abstractmethod
-    def get_render_options(self, world, at):
+    def block_updated(self, world, at):
         pass
 
 class SimpleTexture(TileTexture):
     def __init__(self, texture_asset):
         self.texture_asset = texture_asset
 
-    def get_texture_asset(self, world, at):
+    def get_texture(self):
         return self.texture_asset
 
-    def get_render_options(self, world, at):
+    def get_render_options(self):
         return RenderOptions((1, ))
+
+    def block_updated(self, world, at):
+        pass
 
 
 PRIMARY_CONNECTIONS = [
@@ -40,10 +41,9 @@ class ConnectingTexture(TileTexture):
         self.texture_asset = texture_asset
         self.p_connect = p_connect
 
-    def get_texture_asset(self, world, at):
-        return self.texture_asset
+        self.render_options = RenderOptions((1, ))
 
-    def get_render_options(self, world, at):
+    def block_updated(self, world, at):
         rotations = []
         for delta, mask in PRIMARY_CONNECTIONS:
             rat = (at[0] + delta[0], at[1] + delta[1])
@@ -59,4 +59,11 @@ class ConnectingTexture(TileTexture):
 
         if rotations == []:
             rotations = [1, 2, 4, 8]
-        return RenderOptions(tuple(rotations))
+
+        self.render_options = RenderOptions(tuple(rotations))
+
+    def get_texture(self):
+        return self.texture_asset
+
+    def get_render_options(self):
+        return self.render_options

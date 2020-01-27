@@ -16,10 +16,10 @@ class World:
 
         self.entities.append(make_player([2, 2]))
 
-        self.tiles = defaultdict(lambda : VOID) # {(x, y): Tile}
+        self.tiles = defaultdict(VOID) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
         self.make_cellar(9, 2, "A")
-        self.replace_area(7, 7, 1, 4, WALL_PAPER)
+        self.replace_area(7, 7, 1, 4, WALL_PAPER())
 
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
@@ -40,17 +40,17 @@ class World:
                 here = None
 
                 if x == xmin or x == xmax or y == ymin or y == ymax:
-                    if self.tiles[(x, y)] == VOID:
-                        here = WALL_COBBLE
-                elif self.tiles[(x, y)] == VOID:
-                    here = FLOOR_WOOD
+                    if self.tiles[(x, y)] == VOID():
+                        here = WALL_COBBLE()
+                elif self.tiles[(x, y)] == VOID():
+                    here = FLOOR_WOOD()
                 if here != None:
                     self.tiles[(x, y)] = here
 
     def replace_area(self, xmin, xmax, ymin, ymax, newTile):
         for x in range(xmin, xmax+1):
             for y in range(ymin, ymax+1):
-                self.tiles[(x, y)] = newTile
+                self.tiles[(x, y)] = newTile.copy()
 
     def draw(self, screen):
         self.screen_width = [screen.get_width(), screen.get_height()]
@@ -73,6 +73,9 @@ class World:
     def update(self, dt):
         for entity in self.entities:
             entity.update(self, dt)
+
+        for (at, tile) in self.tiles.items():
+            tile.update(self, at, dt)
 
     def get_at(self, at):
         at = (int(math.floor(at[0])), int(math.floor(at[1])))

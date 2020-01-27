@@ -2,14 +2,16 @@ from abc import ABC, abstractmethod
 
 import math
 import random
+from copy import deepcopy
 
 import pygame
 from texture_asset import TextureAsset
-from tiletexture import *
+from tile_texture import *
 
 class Tile(ABC):
-    def __init__(self, tile_texture):
+    def __init__(self, tile_id, tile_texture):
         self.tile_texture = tile_texture
+        self.tile_id = tile_id
 
     def draw(self, screen, world, at):
         top_left_corner = world.transform_position((at[0], at[1]))
@@ -26,8 +28,8 @@ class Tile(ABC):
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
-        asset = self.tile_texture.get_texture_asset(world, at)
-        surf = asset.render(height, self.tile_texture.get_render_options(world, at))
+        asset = self.tile_texture.get_texture()
+        surf = asset.render(height, self.tile_texture.get_render_options())
 
         screen.blit(surf, top_left_corner)
 
@@ -36,8 +38,14 @@ class Tile(ABC):
     def walk_on(self, entity, world, at):
         pass
 
-    def update(self, world, dt):
-        pass
+    def update(self, world, at, dt):
+        self.tile_texture.block_updated(world, at)
+
+    def __eq__(self, other):
+        return isinstance(other, Tile) and self.tile_id == other.tile_id
+
+    def copy(self):
+        return deepcopy(self)
 
 class Empty(Tile):
     def walk_on(self, entity, world, at):
@@ -50,8 +58,8 @@ class Wall(Tile):
 BREAK_VELOCITY_MIN = 2
 
 class Fragile(Wall):
-    def __init__(self, break_prec, tile_texture):
-        super().__init__(tile_texture)
+    def __init__(self, tile_id, break_prec, tile_texture):
+        super().__init__(tile_id, tile_texture)
         self.break_prec = break_prec
 
     def walk_on(self, entity, world, at):
@@ -61,10 +69,17 @@ class Fragile(Wall):
         if abs(vel_to_check) > BREAK_VELOCITY_MIN:
             print("bonk")
             if random.random() < self.break_prec:
-                world.tiles[at] = FLOOR_WOOD
+                world.tiles[at] = FLOOR_WOOD()
         return True
 
-FLOOR_WOOD = Empty(SimpleTexture(TextureAsset("floorWood.png")))
-WALL_COBBLE = Fragile(0.02, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
-WALL_PAPER = Fragile(1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] is FLOOR_WOOD))
-VOID = Empty(SimpleTexture(TextureAsset("empty.png")))
+def FLOOR_WOOD():
+    return Empty("EMPTY", SimpleTexture(TextureAsset("floorWood.png")))
+
+def WALL_COBBLE():
+    return Fragile("WALL_COBBLE", 0.02, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+
+def WALL_PAPER():
+    return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+
+def VOID():
+    return Wall("VOID", SimpleTexture(TextureAsset("empty.png")))
