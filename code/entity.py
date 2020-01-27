@@ -26,13 +26,13 @@ class Entity:
         self.mass = 1 # kg
 
     def update(self, world, dt):
+        self.texture.entity_moved(self.velocity, dt)
+
         self.velocity[0] -= self.velocity[0] * dt * SLOW_DOWN
         self.velocity[1] -= self.velocity[1] * dt * SLOW_DOWN
 
         self.pos[0] += self.velocity[0] * dt
         self.pos[1] += self.velocity[1] * dt
-
-        self.texture.entity_moved(self.velocity)
 
         block_left, at = world.get_at((self.pos[0] - self.width / 2, self.pos[1]))
         if block_left.walk_on(self, world, at):
