@@ -178,6 +178,11 @@ class American(Human):
         self.height = 0.8
 
         self.mass = 100
+class Crucible(Entity):
+    def __init__(self, pos, texture):
+        super(Crucible, self).__init__(pos, texture)
+
+        self.mass = 500
 
 
 def make_player(pos):
