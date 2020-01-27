@@ -26,7 +26,7 @@ class Tile(ABC):
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
-        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height, self.tile_texture.get_rotation(world, at))
+        surf = self.tile_texture.get_texture_asset(world, at).get_current_sized(height, self.tile_texture.get_render_options(world, at))
 
         screen.blit(surf, top_left_corner)
 

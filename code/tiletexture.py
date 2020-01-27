@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from texture_asset import RenderOptions
 
 class TileTexture(ABC):
     @abstractmethod
@@ -6,7 +7,7 @@ class TileTexture(ABC):
         pass
 
     @abstractmethod
-    def get_rotation(self, world, at):
+    def get_render_options(self, world, at):
         pass
 
 class SimpleTexture(TileTexture):
@@ -16,8 +17,8 @@ class SimpleTexture(TileTexture):
     def get_texture_asset(self, world, at):
         return self.texture_asset
 
-    def get_rotation(self, world, at):
-        return (1, )
+    def get_render_options(self, world, at):
+        return RenderOptions((1, ))
 
 
 PRIMARY_CONNECTIONS = [
@@ -42,7 +43,7 @@ class ConnectingTexture(TileTexture):
     def get_texture_asset(self, world, at):
         return self.texture_asset
 
-    def get_rotation(self, world, at):
+    def get_render_options(self, world, at):
         rotations = []
         for delta, mask in PRIMARY_CONNECTIONS:
             rat = (at[0] + delta[0], at[1] + delta[1])
@@ -56,4 +57,4 @@ class ConnectingTexture(TileTexture):
             if self.p_connect(here):
                 rotations.append(mask)
 
-        return tuple(rotations)
+        return RenderOptions(tuple(rotations))
