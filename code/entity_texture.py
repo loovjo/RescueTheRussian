@@ -35,11 +35,11 @@ class EntityTexture(DynamicTexture):
 
         self.current_frame = (self.current_frame + speed * self.wa_speed) % len(self.frames[self.current_direction])
 
-    def load_walking_texture(entity_name):
+    def load_walking_texture(entity_name, frames=[0, 1, 0, 2]):
         direction_animations = [
             [
                 texture_asset.TextureAsset("human{}{}{}.png".format(entity_name, direction, i))
-                for i in [0, 1, 0, 2]
+                for i in frames
             ]
             for direction in ["Front", "Left", "Back", "Right"]
         ]
