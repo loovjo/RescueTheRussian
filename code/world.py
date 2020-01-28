@@ -15,6 +15,7 @@ class World:
         self.unit_origin = [0, 0]
 
         self.entities.append(make_player([2, 2]))
+        self.entities.append(make_swede([3, 2]))
 
         self.tiles = defaultdict(lambda: VOID()) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")

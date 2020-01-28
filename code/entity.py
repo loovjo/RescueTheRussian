@@ -178,6 +178,15 @@ class American(Human):
         self.height = 0.8
 
         self.mass = 100
+
+class Swede(Human):
+    def __init__(self, pos, texture):
+        super(Swede, self).__init__(pos, texture)
+
+        self.mass = 20
+        self.height = 0.9
+
+
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
@@ -190,3 +199,6 @@ def make_player(pos):
 
 def make_american(pos):
     return American(pos, EntityTexture.load_walking_texture("AmAm"))
+
+def make_swede(pos):
+    return Swede(pos, EntityTexture.load_walking_texture("SwSw", [0, 1, 0, 1]))
