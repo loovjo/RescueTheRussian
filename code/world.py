@@ -2,6 +2,7 @@ from tile import *
 from collections import defaultdict
 from entity import *
 import math
+from queue import PriorityQueue
 
 PIXELS_PER_UNIT = 70
 
@@ -21,6 +22,39 @@ class World:
         self.make_cellar(0, 0, "R")
         self.make_cellar(8, 2, "A")
         self.replace_area(8, 8, 3, 4, WALL_PAPER())
+
+        self.tile_nationality = {} # {pos: (nationality, distance to flag)}
+
+        self.update_tile_nationality((2, 2), 'rus')
+        print(self.tile_nationality)
+
+    def update_tile_nationality(self, pos, nationality):
+        visited = set()
+        visiting = PriorityQueue() # Contains (-distance, (x, y))
+        visiting.put((0, pos))
+
+        while not visiting.empty():
+            ndist, (x, y) = visiting.get()
+            distance = -ndist
+            if (x, y) in visited:
+                continue
+
+            visited.add((x, y))
+
+            tile, _ = self.get_at((x, y))
+            if not isinstance(tile, FloorTile):
+                continue
+
+            if (x, y) in self.tile_nationality:
+                _, prev_distance = self.tile_nationality[(x, y)]
+                if prev_distance <= distance:
+                    continue
+
+            self.tile_nationality[(x, y)] = (nationality, distance)
+            for dx, dy in [(0, 1), (-1, 0), (0, -1), (1, 0)]:
+                rx, ry = x + dx, y + dy
+                visit = (-(distance + 1), (rx, ry))
+                visiting.put(visit)
 
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
