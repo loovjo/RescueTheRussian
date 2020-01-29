@@ -50,6 +50,10 @@ class Empty(Tile):
     def walk_on(self, entity, world, at):
         return False
 
+class Void(Empty):
+    def walk_on(self, entity, world, at):
+        return False
+
 class FloorTile(Empty):
     # Floor tiles pass on their nationality, any other type of tile blocks them
     pass
@@ -85,4 +89,4 @@ def WALL_PAPER():
     return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
 
 def VOID():
-    return Wall("VOID", SimpleTexture(TextureAsset("empty.png")))
+    return Void("VOID", SimpleTexture(TextureAsset("empty.png")))
