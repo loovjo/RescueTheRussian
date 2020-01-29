@@ -1,6 +1,8 @@
 import math
 from entity_texture import EntityTexture
+import texture_asset
 import pygame
+import random
 
 BOX_SIZE = 3
 
@@ -195,13 +197,17 @@ class Swede(Human):
         self.mass = 20
         self.height = 0.9
 
-
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
 
         self.mass = 500
 
+class Flag(Entity):
+    def update_texture(self, dt):
+        self.texture.entity_moved([0, 4], dt)
+        self.height = 0.5
+        self.width = 1
 
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
@@ -211,3 +217,31 @@ def make_american(pos):
 
 def make_swede(pos):
     return Swede(pos, EntityTexture.load_walking_texture("SwSw", [0, 1, 0, 1]))
+
+def make_flag_am(pos):
+    animation = [
+        texture_asset.TextureAsset("US_Rendered/out{:04d}.png".format(i))
+        for i in range(0, 50, 2)
+    ]
+    entext = EntityTexture(*([animation] * 4))
+
+    return Flag(pos, entext)
+
+def make_flag_sw(pos):
+    animation = [
+        texture_asset.TextureAsset("SW_Rendered/out{:04d}.png".format(i))
+        for i in range(0, 50, 2)
+    ]
+    entext = EntityTexture(*([animation] * 4))
+
+    return Flag(pos, entext)
+
+def make_flag_ru(pos):
+    animation = [
+        texture_asset.TextureAsset("RU_Rendered/out{:04d}.png".format(i))
+        for i in range(0, 50, 2)
+    ]
+    entext = EntityTexture(*([animation] * 4))
+
+    return Flag(pos, entext)
+
