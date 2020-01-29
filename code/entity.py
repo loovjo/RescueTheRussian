@@ -26,14 +26,22 @@ class Entity:
         self.mass = 1 # kg
 
     def update(self, world, dt):
+        self.update_texture(dt)
+        self.update_posvel(dt)
+        self.update_entity_collisions(world, dt)
+        self.update_block_collisions(world, dt)
+
+    def update_texture(self, dt):
         self.texture.entity_moved(self.velocity, dt)
 
+    def update_posvel(self, dt):
         self.velocity[0] -= self.velocity[0] * dt * SLOW_DOWN
         self.velocity[1] -= self.velocity[1] * dt * SLOW_DOWN
 
         self.pos[0] += self.velocity[0] * dt
         self.pos[1] += self.velocity[1] * dt
 
+    def update_block_collisions(self, world, dt):
         block_left, at = world.get_at((self.pos[0] - self.width / 2, self.pos[1]))
         if block_left.walk_on(self, world, at):
             self.pos[0] = math.ceil(self.pos[0] - self.width / 2) + self.width / 2
@@ -54,6 +62,7 @@ class Entity:
             self.pos[1] = math.floor(self.pos[1] + self.height / 2) - self.height / 2
             self.velocity[1] *= -1
 
+    def update_entity_collisions(self, world, dt):
         # Collide with other entities
         # TODO: Not very efficient to loop thrgouh all other entities, makes update O(n^2)
         # We could use some more efficient data structure for storing entities, with fast
