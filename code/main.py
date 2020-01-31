@@ -29,23 +29,23 @@ while True:
             exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != -1:
                 acc[0] -= 1
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != 1:
                 acc[0] += 1
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != -1:
                 acc[1] -= 1
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != 1:
                 acc[1] += 1
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != 1:
                 acc[0] += 1
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != -1:
                 acc[0] -= 1
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 1:
                 acc[1] += 1
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != -1:
                 acc[1] -= 1
 
     dt = time.time() - last_time
