@@ -77,6 +77,7 @@ class Fragile(Wall):
             print("bonk")
             if random.random() < self.break_prec:
                 world.tiles[at] = FLOOR_WOOD()
+                world.onBreakWall(at[0], at[1])
         return True
 
 def FLOOR_WOOD():

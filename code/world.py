@@ -31,33 +31,27 @@ class World:
         self.update_tile_nationality((2, 2), 'rus')
         print(self.tile_nationality)
 
-    def update_tile_nationality(self, pos, nationality):
-        visited = set()
-        visiting = PriorityQueue() # Contains (-distance, (x, y))
-        visiting.put((0, pos))
+    def draw(self, screen):
+        self.screen_width = [screen.get_width(), screen.get_height()]
 
-        while not visiting.empty():
-            ndist, (x, y) = visiting.get()
-            distance = -ndist
-            if (x, y) in visited:
-                continue
+        self.unit_origin = self.entities[0].pos
 
-            visited.add((x, y))
+        for (x, y), tile in self.tiles.items():
+            tile.draw(screen, self, (x, y))
 
-            tile, _ = self.get_at((x, y))
-            if not isinstance(tile, FloorTile):
-                continue
+        for entity in self.entities:
+            entity.draw(self, screen)
 
-            if (x, y) in self.tile_nationality:
-                _, prev_distance = self.tile_nationality[(x, y)]
-                if prev_distance <= distance:
-                    continue
+    def get_at(self, at):
+        at = (int(math.floor(at[0])), int(math.floor(at[1])))
+        if at in self.tiles:
+            return self.tiles[at], at
+        return VOID(), at
 
-            self.tile_nationality[(x, y)] = (nationality, distance)
-            for dx, dy in [(0, 1), (-1, 0), (0, -1), (1, 0)]:
-                rx, ry = x + dx, y + dy
-                visit = (-(distance + 1), (rx, ry))
-                visiting.put(visit)
+    def get_player_idx(self):
+        for i in range(len(self.entities)):
+            if isinstance(self.entities[i], Russian):
+                return i
 
     def make_cellar(self, xmin, ymin, nationality):
         if nationality == "S":
@@ -85,26 +79,19 @@ class World:
                 if here != None:
                     self.tiles[(x, y)] = here
 
+    def onBreakWall(self, tile_x, tile_y):
+        for x in range(tile_x-1, tile_x+2):
+            for y in range(tile_y-1, tile_y+2):
+                if self.tiles[(x, y)] == VOID():
+                    self.tiles[(x, y)] = WALL_COBBLE()
+
     def replace_area(self, xmin, xmax, ymin, ymax, newTile):
         for x in range(xmin, xmax+1):
             for y in range(ymin, ymax+1):
                 self.tiles[(x, y)] = newTile.copy()
 
-    def draw(self, screen):
-        self.screen_width = [screen.get_width(), screen.get_height()]
-
-        self.unit_origin = self.entities[0].pos
-
-        for (x, y), tile in self.tiles.items():
-            tile.draw(screen, self, (x, y))
-
-        for entity in self.entities:
-            entity.draw(self, screen)
-
-    def get_player_idx(self):
-        for i in range(len(self.entities)):
-            if isinstance(self.entities[i], Russian):
-                return i
+    def transform_position(self, position):
+        return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
 
     def update(self, dt):
         for entity in self.entities:
@@ -113,11 +100,30 @@ class World:
         for (at, tile) in self.tiles.items():
             tile.update(self, at, dt)
 
-    def get_at(self, at):
-        at = (int(math.floor(at[0])), int(math.floor(at[1])))
-        if at in self.tiles:
-            return self.tiles[at], at
-        return VOID(), at
+    def update_tile_nationality(self, pos, nationality):
+        visited = set()
+        visiting = PriorityQueue() # Contains (-distance, (x, y))
+        visiting.put((0, pos))
 
-    def transform_position(self, position):
-        return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
+        while not visiting.empty():
+            ndist, (x, y) = visiting.get()
+            distance = -ndist
+            if (x, y) in visited:
+                continue
+
+            visited.add((x, y))
+
+            tile, _ = self.get_at((x, y))
+            if not isinstance(tile, FloorTile):
+                continue
+
+            if (x, y) in self.tile_nationality:
+                _, prev_distance = self.tile_nationality[(x, y)]
+                if prev_distance <= distance:
+                    continue
+
+            self.tile_nationality[(x, y)] = (nationality, distance)
+            for dx, dy in [(0, 1), (-1, 0), (0, -1), (1, 0)]:
+                rx, ry = x + dx, y + dy
+                visit = (-(distance + 1), (rx, ry))
+                visiting.put(visit)
