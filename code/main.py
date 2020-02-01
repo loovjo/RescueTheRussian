@@ -6,7 +6,7 @@ import time
 import random
 
 world = world.World()
-#world.entities.append(entity.make_player([2, 2]))
+# world.entities.append(entity.make_player([2, 2]))
 
 width, height = size = 800, 600
 
@@ -29,31 +29,40 @@ while True:
             exit()
 
         if event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != -1:
-                acc[0] -= 1
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != 1:
-                acc[0] += 1
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != -1:
-                acc[1] -= 1
-            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != 1:
-                acc[1] += 1
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                left = True
+                acc[0] = -1
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                right = True
+                acc[0] = 1
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                up = True
+                acc[1] = -1
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                down = True
+                acc[1] = 1
 
         if event.type == pygame.KEYUP:
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != 1:
-                acc[0] += 1
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != -1:
-                acc[0] -= 1
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 1:
-                acc[1] += 1
-            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != -1:
-                acc[1] -= 1
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                left = False
+                acc[0] = 0
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                right = False
+                acc[0] = 0
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                up = False
+                acc[1] = 0
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                down = False
+                acc[1] = 0
+
+
 
     dt = time.time() - last_time
     last_time = time.time()
     if dt < 1 / 60:
         time.sleep(1 / 60 - dt)
         dt = 1 / 60
-
 
     human = world.entities[world.get_player_idx()]
     human.velocity[0] += acc[0] * dt * 50
@@ -78,4 +87,3 @@ while True:
         average_dt = sum(last_dts) / len(last_dts)
         last_dts = []
         print("FPS: {:.4}".format(1 / average_dt))
-
