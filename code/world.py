@@ -20,7 +20,6 @@ class World:
         self.entities.append(make_flag_am([5, 1.25]))
         self.entities.append(make_flag_sw([7, 1.25]))
         self.entities.append(make_flag_ru([3, 1.25]))
-        self.entities.append(make_rock([4, 1.25]))
 
         self.tiles = defaultdict(lambda: VOID()) # {(x, y): Tile}
         self.make_cellar(0, 0, "R")
@@ -81,6 +80,7 @@ class World:
                     self.tiles[(x, y)] = here
 
     def onBreakWall(self, tile_x, tile_y):
+        self.entities.append(make_rock([tile_x, tile_y]))
         for x in range(tile_x-1, tile_x+2):
             for y in range(tile_y-1, tile_y+2):
                 if self.tiles[(x, y)] == VOID():

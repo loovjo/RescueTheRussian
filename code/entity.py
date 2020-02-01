@@ -273,6 +273,6 @@ def make_flag_ru(pos):
 
 
 def make_rock(pos):
-    entext = EntityTexture(*([texture_asset.TextureAsset("rock.png")] *4))
+    entext = EntityTexture(*([[texture_asset.TextureAsset("rock.png")]] * 4))
 
     return Rock(pos, entext)
