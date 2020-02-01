@@ -12,6 +12,7 @@ DRAW_DEBUG_HITBOXES = False
 
 BOUNCE_COEFFICIENT = 0.7
 
+
 class Entity:
     def __init__(self, pos, texture):
         if not isinstance(texture, EntityTexture):
@@ -25,7 +26,7 @@ class Entity:
         self.width = 0.4
         self.height = 0.8
 
-        self.mass = 1 # kg
+        self.mass = 1  # kg
 
     def update(self, world, dt):
         self.update_texture(dt)
@@ -79,14 +80,18 @@ class Entity:
             # Keep momentum: v1_1 * m1 + v2_1 * m2 = v1_2 * m1 + v2_2 * m2
             # Decrease energy: m1 * v1_1 ** 2 + m2 * v2_1 ** 2 = c * (m1 * v1_2 ** 2 + m2 * v2_2 ** 2)
 
-            my_vel_after_x = BOUNCE_COEFFICIENT * other.mass * (other.velocity[0] - self.velocity[0]) + self.mass * self.velocity[0] + other.mass * other.velocity[0]
+            my_vel_after_x = BOUNCE_COEFFICIENT * other.mass * (other.velocity[0] - self.velocity[0]) + self.mass * \
+                             self.velocity[0] + other.mass * other.velocity[0]
             my_vel_after_x /= self.mass + other.mass
-            my_vel_after_y = BOUNCE_COEFFICIENT * other.mass * (other.velocity[1] - self.velocity[1]) + self.mass * self.velocity[1] + other.mass * other.velocity[1]
+            my_vel_after_y = BOUNCE_COEFFICIENT * other.mass * (other.velocity[1] - self.velocity[1]) + self.mass * \
+                             self.velocity[1] + other.mass * other.velocity[1]
             my_vel_after_y /= self.mass + other.mass
 
-            other_vel_after_x = BOUNCE_COEFFICIENT * self.mass * (self.velocity[0] - other.velocity[0]) + other.mass * other.velocity[0] + self.mass * self.velocity[0]
+            other_vel_after_x = BOUNCE_COEFFICIENT * self.mass * (self.velocity[0] - other.velocity[0]) + other.mass * \
+                                other.velocity[0] + self.mass * self.velocity[0]
             other_vel_after_x /= self.mass + other.mass
-            other_vel_after_y = BOUNCE_COEFFICIENT * self.mass * (self.velocity[1] - other.velocity[1]) + other.mass * other.velocity[1] + self.mass * self.velocity[1]
+            other_vel_after_y = BOUNCE_COEFFICIENT * self.mass * (self.velocity[1] - other.velocity[1]) + other.mass * \
+                                other.velocity[1] + self.mass * self.velocity[1]
             other_vel_after_y /= self.mass + other.mass
 
             self.velocity = [my_vel_after_x, my_vel_after_y]
@@ -114,14 +119,15 @@ class Entity:
             for i in range(20):
                 distance_here = (max_colliding_distance + min_noncolliding_distance) / 2
 
-                self.pos = [center_of_mass_x + my_delta_x * distance_here, center_of_mass_y + my_delta_y * distance_here]
-                other.pos = [center_of_mass_x - other_delta_x * distance_here, center_of_mass_y - other_delta_y * distance_here]
+                self.pos = [center_of_mass_x + my_delta_x * distance_here,
+                            center_of_mass_y + my_delta_y * distance_here]
+                other.pos = [center_of_mass_x - other_delta_x * distance_here,
+                             center_of_mass_y - other_delta_y * distance_here]
 
                 if self.collides_with(other):
                     max_colliding_distance = distance_here
                 else:
                     min_noncolliding_distance = distance_here
-
 
     def collides_with(self, other):
         if other.pos[0] - other.width / 2 >= self.pos[0] + self.width / 2:
@@ -176,11 +182,13 @@ class Entity:
 class Human(Entity):
     pass
 
+
 class Russian(Human):
     def __init__(self, pos, texture):
         super(Russian, self).__init__(pos, texture)
 
         self.mass = 50
+
 
 class American(Human):
     def __init__(self, pos, texture):
@@ -190,6 +198,7 @@ class American(Human):
 
         self.mass = 100
 
+
 class Swede(Human):
     def __init__(self, pos, texture):
         super(Swede, self).__init__(pos, texture)
@@ -197,11 +206,13 @@ class Swede(Human):
         self.mass = 20
         self.height = 0.9
 
+
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
 
         self.mass = 500
+
 
 class Flag(Entity):
     def update_texture(self, dt):
@@ -209,14 +220,27 @@ class Flag(Entity):
         self.height = 0.5
         self.width = 1
 
+
+class Rock(Entity):
+    def __init__(self, pos, texture):
+        super(Rock, self).__init__(pos, texture)
+
+        self.height = 0.4
+        self.width = 0.4
+        self.mass = 5
+
+
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
+
 
 def make_american(pos):
     return American(pos, EntityTexture.load_walking_texture("AmAm"))
 
+
 def make_swede(pos):
     return Swede(pos, EntityTexture.load_walking_texture("SwSw", [0, 1, 0, 1]))
+
 
 def make_flag_am(pos):
     animation = [
@@ -227,6 +251,7 @@ def make_flag_am(pos):
 
     return Flag(pos, entext)
 
+
 def make_flag_sw(pos):
     animation = [
         texture_asset.TextureAsset("SW_Rendered/out{:04d}.png".format(i))
@@ -235,6 +260,7 @@ def make_flag_sw(pos):
     entext = EntityTexture(*([animation] * 4))
 
     return Flag(pos, entext)
+
 
 def make_flag_ru(pos):
     animation = [
@@ -245,3 +271,8 @@ def make_flag_ru(pos):
 
     return Flag(pos, entext)
 
+
+def make_rock(pos):
+    entext = EntityTexture(*([texture_asset.TextureAsset("rock.png")] *4))
+
+    return Rock(pos, entext)
