@@ -84,6 +84,9 @@ class Entity:
                 world.remove_entity(other)
                 self.mass += 5
 
+            if isinstance(self, Rock) and isinstance(other, Crucible):
+                other.smelt(self)
+                world.remove_entity(self)
 
             my_vel_after_x = BOUNCE_COEFFICIENT * other.mass * (other.velocity[0] - self.velocity[0]) + self.mass * \
                              self.velocity[0] + other.mass * other.velocity[0]
@@ -215,8 +218,13 @@ class Swede(Human):
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
+        self.width = 1
+        self.height = 1
 
         self.mass = 500
+
+    def smelt(self, rock):
+        self.texture = EntityTexture(*([[texture_asset.TextureAsset("crucible2.png")]] * 4))
 
 
 class Flag(Entity):
@@ -232,6 +240,7 @@ class Rock(Entity):
 
         self.height = 0.4
         self.width = 0.4
+
         self.mass = 5
 
 
@@ -281,3 +290,8 @@ def make_rock(pos):
     entext = EntityTexture(*([[texture_asset.TextureAsset("rock.png")]] * 4))
 
     return Rock(pos, entext)
+
+def make_crucible(pos):
+    entext = EntityTexture(*([[texture_asset.TextureAsset("crucible1.png")]] * 4))
+
+    return Crucible(pos, entext)
