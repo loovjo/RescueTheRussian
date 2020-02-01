@@ -128,3 +128,6 @@ class World:
                 rx, ry = x + dx, y + dy
                 visit = (-(distance + 1), (rx, ry))
                 visiting.put(visit)
+
+    def remove_entity(self, entity):
+        self.entities.remove(entity)
