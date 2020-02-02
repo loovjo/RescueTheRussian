@@ -78,15 +78,10 @@ class Entity:
 
             if not self.collides_with(other):
                 continue
+            self.on_collision(other, world)
+
             # Keep momentum: v1_1 * m1 + v2_1 * m2 = v1_2 * m1 + v2_2 * m2
             # Decrease energy: m1 * v1_1 ** 2 + m2 * v2_1 ** 2 = c * (m1 * v1_2 ** 2 + m2 * v2_2 ** 2)
-            if isinstance(self, Rock) and isinstance(other, Rock) and self.mass == other.mass:
-                world.remove_entity(other)
-                self.mass += 5
-
-            if isinstance(self, Rock) and isinstance(other, Crucible):
-                other.smelt(self)
-                world.remove_entity(self)
 
             my_vel_after_x = BOUNCE_COEFFICIENT * other.mass * (other.velocity[0] - self.velocity[0]) + self.mass * \
                              self.velocity[0] + other.mass * other.velocity[0]
@@ -155,6 +150,9 @@ class Entity:
             return False
 
         return True
+
+    def on_collision(self, other, world):
+        pass
 
     def draw(self, world, screen):
         top_left_corner = world.transform_position((self.pos[0] - 0.5, self.pos[1] - 0.5))
@@ -243,6 +241,14 @@ class Rock(Entity):
 
         self.mass = 5
 
+    def on_collision(self, other, world):
+        if isinstance(self, Rock) and isinstance(other, Rock) and self.mass == other.mass:
+            world.remove_entity(other)
+            self.mass += 5
+
+        if isinstance(self, Rock) and isinstance(other, Crucible):
+            other.smelt(self)
+            world.remove_entity(self)
 
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
