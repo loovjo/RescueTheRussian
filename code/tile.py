@@ -14,6 +14,7 @@ class Tile(ABC):
         self.tile_id = tile_id
 
     def draw(self, screen, world, at):
+        self.tile_texture.block_updated(world, at)
         top_left_corner = world.transform_position((at[0], at[1]))
         bottom_right_corner = world.transform_position((at[0] + 1, at[1] + 1))
 
@@ -38,7 +39,7 @@ class Tile(ABC):
         pass
 
     def update(self, world, at, dt):
-        self.tile_texture.block_updated(world, at)
+        pass
 
     def __eq__(self, other):
         return isinstance(other, Tile) and self.tile_id == other.tile_id
