@@ -16,7 +16,7 @@ screen = pygame.display.set_mode(size)
 
 pygame.display.set_caption("Rescue the russian")
 
-acc = [0, 0]
+acc = [[0, 0], [0, 0]]
 
 last_time = time.time()
 last_dts = []
@@ -29,24 +29,24 @@ while True:
             exit()
 
         if event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != -1:
-                acc[0] -= 1
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != 1:
-                acc[0] += 1
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != -1:
-                acc[1] -= 1
-            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != 1:
-                acc[1] += 1
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0][0] != -1:
+                acc[0][0] -= 1
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0][1] != 1:
+                acc[0][1] += 1
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1][0] != -1:
+                acc[1][0] -= 1
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1][1] != 1:
+                acc[1][1] += 1
 
         if event.type == pygame.KEYUP:
-            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != 0:
-                acc[0] += 1
-            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != -0:
-                acc[0] -= 1
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 0:
-                acc[1] += 1
-            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 0:
-                acc[1] -= 1
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0][0] != 0:
+                acc[0][0] += 1
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0][1] != 0:
+                acc[0][1] -= 1
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1][0] != 0:
+                acc[1][0] += 1
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1][1] != 0:
+                acc[1][1] -= 1
 
 
 
@@ -57,8 +57,8 @@ while True:
         dt = 1 / 60
 
     human = world.entities[world.get_player_idx()]
-    human.velocity[0] += acc[0] * dt * 50
-    human.velocity[1] += acc[1] * dt * 50
+    human.velocity[0] += (acc[0][0] + acc[0][1]) * dt * 50
+    human.velocity[1] += (acc[1][0] + acc[1][1]) * dt * 50
 
     udt = dt
     while udt > 1 / 60:
