@@ -81,7 +81,9 @@ class Entity:
 
             if not self.collides_with(other):
                 continue
+
             self.on_collision(other, world)
+            other.on_collision(self, world)
 
             # Keep momentum: v1_1 * m1 + v2_1 * m2 = v1_2 * m1 + v2_2 * m2
             # Decrease energy: m1 * v1_1 ** 2 + m2 * v2_1 ** 2 = c * (m1 * v1_2 ** 2 + m2 * v2_2 ** 2)
