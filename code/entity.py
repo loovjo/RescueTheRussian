@@ -1,9 +1,12 @@
 import math
+import time
+
 from entity_texture import EntityTexture
 import texture_asset
 import pygame
 import random
 
+from entity_texture import CrucibleTexture
 
 BOX_SIZE = 3
 
@@ -216,14 +219,24 @@ class Swede(Human):
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
+        self.smelting = False
         self.width = 1
         self.height = 1
 
         self.mass = 500
 
     def smelt(self, rock):
-        self.texture = EntityTexture(*([[texture_asset.TextureAsset("crucible2.png")]] * 4))
+        self.smelting = self.texture.crucible_next_texture()
+        self.time_since_texture = time.time()
 
+    def update(self, world, dt):
+        self.update_texture(dt)
+        self.update_posvel(dt)
+        self.update_entity_collisions(world, dt)
+        self.update_block_collisions(world, dt)
+        if self.smelting and time.time() - self.time_since_texture > 2:
+            self.smelting = self.texture.crucible_next_texture()
+            self.time_since_texture = time.time()
 
 class Flag(Entity):
     def update_texture(self, dt):
@@ -298,6 +311,6 @@ def make_rock(pos):
     return Rock(pos, entext)
 
 def make_crucible(pos):
-    entext = EntityTexture(*([[texture_asset.TextureAsset("crucible1.png")]] * 4))
+    entext = CrucibleTexture()
 
     return Crucible(pos, entext)

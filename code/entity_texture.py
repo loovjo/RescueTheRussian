@@ -4,6 +4,7 @@ import texture_asset
 MIN_VELOCITY = 0.04
 WALK_CHANGE_SPEED = 10
 
+
 class EntityTexture(DynamicTexture):
     def __init__(self, f_frames, l_frames, d_frames, r_frames, wa_speed=0.05):
         self.frames = [f_frames, l_frames, d_frames, r_frames]
@@ -23,9 +24,9 @@ class EntityTexture(DynamicTexture):
             self.average_velocity[1] * (1 - WALK_CHANGE_SPEED * dt) + velocity[1] * WALK_CHANGE_SPEED * dt,
         ]
 
-        if abs(self.average_velocity[0]) > abs(self.average_velocity[1]): # Moves in x
+        if abs(self.average_velocity[0]) > abs(self.average_velocity[1]):  # Moves in x
             self.current_direction = 3 if self.average_velocity[0] > 0 else 1
-        else: # Moves in y
+        else:  # Moves in y
             self.current_direction = 0 if self.average_velocity[1] > 0 else 2
 
         speed = (self.average_velocity[0] ** 2 + self.average_velocity[1] ** 2) ** 0.5
@@ -46,4 +47,24 @@ class EntityTexture(DynamicTexture):
         return EntityTexture(*direction_animations)
 
     def get_render_options(self):
-        return texture_asset.RenderOptions((1, ))
+        return texture_asset.RenderOptions((1,))
+
+
+class CrucibleTexture(EntityTexture):
+    def __init__(self):
+        self.current_direction = 0
+        self.current_frame = 0
+        self.frames = [[
+            texture_asset.TextureAsset("crucible{}.png".format(i))
+            for i in range(0, 4)
+        ]]
+
+    def entity_moved(self, velocity, dt):
+        pass
+
+    def crucible_next_texture(self):
+        self.current_frame += 1
+        if self.current_frame == 4:
+            self.current_frame = 0
+            return False
+        return True
