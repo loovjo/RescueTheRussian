@@ -29,32 +29,24 @@ while True:
             exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                left = True
-                acc[0] = -1
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                right = True
-                acc[0] = 1
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
-                up = True
-                acc[1] = -1
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                down = True
-                acc[1] = 1
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != -1:
+                acc[0] -= 1
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != 1:
+                acc[0] += 1
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != -1:
+                acc[1] -= 1
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and acc[1] != 1:
+                acc[1] += 1
 
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                left = False
-                acc[0] = 0
-            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                right = False
-                acc[0] = 0
-            if event.key == pygame.K_UP or event.key == pygame.K_w:
-                up = False
-                acc[1] = 0
-            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                down = False
-                acc[1] = 0
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and acc[0] != 0:
+                acc[0] += 1
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and acc[0] != -0:
+                acc[0] -= 1
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 0:
+                acc[1] += 1
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and acc[1] != 0:
+                acc[1] -= 1
 
 
 
