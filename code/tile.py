@@ -14,7 +14,6 @@ class Tile(ABC):
         self.tile_id = tile_id
 
     def draw(self, screen, world, at):
-        self.tile_texture.block_updated(world, at)
         top_left_corner = world.transform_position((at[0], at[1]))
         bottom_right_corner = world.transform_position((at[0] + 1, at[1] + 1))
 
@@ -26,6 +25,8 @@ class Tile(ABC):
 
         if not rect.colliderect(screen.get_rect()):
             return
+
+        self.tile_texture.block_updated(world, at)
 
         height = math.ceil(bottom_right_corner[1] - top_left_corner[1])
 
