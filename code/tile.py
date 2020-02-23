@@ -86,7 +86,7 @@ def FLOOR_WOOD():
     return FloorTile("FLOOR_WOOD", SimpleTexture(TextureAsset("floorWood.png")))
 
 def WALL_COBBLE():
-    return Fragile("WALL_COBBLE", 1, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+    return Fragile("WALL_COBBLE", 0.1, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
 
 def WALL_PAPER():
     return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
