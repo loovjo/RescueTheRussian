@@ -3,7 +3,7 @@ from collections import defaultdict
 from entity import *
 import math
 from queue import PriorityQueue
-from random import random
+from random import random, choice
 
 PIXELS_PER_UNIT = 70
 
@@ -78,13 +78,15 @@ class World:
         xmax = xmin + xsize
         ymax = ymin + ysize
 
+        wall_type = choice([WALL_COBBLE, WALL_IRON])
+
         for x in range(xmin, xmax + 1):
             for y in range(ymin, ymax + 1):
                 here = None
 
                 if x == xmin or x == xmax or y == ymin or y == ymax:
                     if self.tiles[(x, y)] == VOID():
-                        here = WALL_COBBLE()
+                        here = wall_type()
                 elif self.tiles[(x, y)] == VOID():
                     here = FLOOR_WOOD()
                 if here != None:

@@ -91,5 +91,8 @@ def WALL_COBBLE():
 def WALL_PAPER():
     return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
 
+def WALL_IRON():
+    return Fragile("WALL_IRON", 0.02, ConnectingTexture(TextureAsset("wallIron.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+
 def VOID():
     return Void("VOID", SimpleTexture(TextureAsset("empty.png")))
