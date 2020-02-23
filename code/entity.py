@@ -248,7 +248,7 @@ class Flag(Entity):
 
         self.mass = 5
 
-ROCK_SIZES = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+ROCK_SIZES = [0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1]
 class Rock(Entity):
     def __init__(self, pos, texture):
         super(Rock, self).__init__(pos, texture)
@@ -316,15 +316,18 @@ def make_flag_ru(pos):
     return Flag(pos, entext)
 
 
-def make_rock(pos):
+def make_rock(pos, size=0):
     animation = [
         texture_asset.TextureAsset("rock{}.png".format(i))
-        for i in range(7)
+        for i in range(10)
     ]
 
     entext = EntityTexture(*([animation] * 4))
 
-    return Rock(pos, entext)
+    rock = Rock(pos, entext)
+    rock.size_frame = size
+
+    return rock
 
 def make_crucible(pos):
     entext = CrucibleTexture()
