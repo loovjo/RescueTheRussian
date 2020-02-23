@@ -12,7 +12,7 @@ BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
-DRAW_DEBUG_HITBOXES = True
+DRAW_DEBUG_HITBOXES = False
 
 BOUNCE_COEFFICIENT = 0.7
 
@@ -248,7 +248,7 @@ class Flag(Entity):
 
         self.mass = 5
 
-ROCK_SIZES = [0.4, 0.6, 0.8, 1]
+ROCK_SIZES = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 class Rock(Entity):
     def __init__(self, pos, texture):
         super(Rock, self).__init__(pos, texture)
@@ -319,7 +319,7 @@ def make_flag_ru(pos):
 def make_rock(pos):
     animation = [
         texture_asset.TextureAsset("rock{}.png".format(i))
-        for i in range(4)
+        for i in range(7)
     ]
 
     entext = EntityTexture(*([animation] * 4))
