@@ -1,5 +1,6 @@
 import math
 import time
+from typing import Any, Union
 
 from entity_texture import EntityTexture
 import texture_asset
@@ -111,9 +112,15 @@ class Entity:
             delta_position_x = self.pos[0] - center_of_mass_x
             delta_position_y = self.pos[1] - center_of_mass_y
 
-            distance = (delta_position_x ** 2 + delta_position_y ** 2) ** 0.5
-            delta_position_x /= distance
-            delta_position_y /= distance
+            distance: Union[float, Any] = (delta_position_x ** 2 + delta_position_y ** 2) ** 0.5
+            try:
+                delta_position_x /= distance
+            except:
+                delta_position_x = 1000
+            try:
+                delta_position_y /= distance
+            except:
+                delta_position_y = 1000
 
             my_delta_x = other.mass * delta_position_x / (self.mass + other.mass)
             my_delta_y = other.mass * delta_position_y / (self.mass + other.mass)
@@ -246,6 +253,8 @@ class Crucible(Entity):
         if self.smelting and time.time() - self.time_since_texture > 2:
             self.smelting = self.texture.crucible_next_texture()
             self.time_since_texture = time.time()
+            if not self.smelting:
+                world.entities.append(make_spoon(self.pos))
 
 class Flag(Entity):
     def update_texture(self, dt):
