@@ -25,8 +25,8 @@ class World:
         self.entities.append(make_crucible([3, 3.25]))
 
         self.tiles = defaultdict(lambda: VOID())  # {(x, y): Tile}
-        self.make_cellar(0, 10, 0, 7, "R")
-        self.make_cellar(8, 7, 2, 5, "A")
+        self.make_cellar(0, 0, 0, 0, "R")
+        self.make_cellar(8, 0, 2, 0, "A")
         self.replace_area(8, 8, 3, 4, WALL_PAPER())
 
         self.tile_nationality = {}  # {pos: (nationality, distance to flag)}
@@ -99,7 +99,7 @@ class World:
         self.entities.append(rock)
 
         # add new room
-        if random() < 0.5:
+        if random() < 0.2:
             sizex = 7 + math.floor((random()-0.5)*2)
             sizey = 5 + math.floor((random()-0.5)*2)
             locations = [[]]
