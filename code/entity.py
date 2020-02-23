@@ -261,9 +261,9 @@ class Rock(Entity):
             world.remove_entity(other)
             self.mass += 5
 
-        if isinstance(self, Rock) and isinstance(other, Crucible):
-            other.smelt(self)
+        if isinstance(self, Rock) and isinstance(other, Crucible) and not other.smelting:
             world.remove_entity(self)
+            other.smelt(self)
 
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
