@@ -17,7 +17,7 @@ class World:
         self.unit_origin = [0, 0]
 
         self.entities.append(make_player([2, 2]))
-        self.entities.append(make_rock([3, 2], 8))
+        self.entities.append(make_swede([3, 2]))
         self.entities.append(make_flag_am([5, 1.25]))
         self.entities.append(make_flag_sw([7, 1.25]))
         self.entities.append(make_flag_ru([3, 1.25]))
