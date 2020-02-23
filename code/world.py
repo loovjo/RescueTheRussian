@@ -91,15 +91,16 @@ class World:
 
         # add new room
         if random() < 0.5:
-            success = False
-            for x in range(tile_x-7, tile_x):
-                for y in range(tile_y-5, tile_y):
-                    if self.is_void(x, x+7, y, y+5):
-                        self.make_cellar(x, y, "A")
-                        success = True
-                        break
-                if success:
-                    break
+            locations = [[]]
+            for x in range(tile_x-7, tile_x + 1):
+                for y in range(tile_y-5, tile_y + 1):
+                    if (x == tile_x-7 or x == tile_x) and (y == tile_y-5 or y == tile_y):
+                        continue
+                    if self.is_void(x+1, x+6, y+1, y+4):
+                        locations.append([x, y])
+            pos = locations[math.floor(random() * (len(locations)))]
+            if len(pos) == 2:
+                self.make_cellar(pos[0], pos[1], "A")
 
         # fill up gaps in wall with cobble
         for x in range(tile_x-1, tile_x+2):
@@ -109,8 +110,8 @@ class World:
 
     def is_void(self, xmin, xmax, ymin, ymax):
         empty = True
-        for x in range(xmin, xmax):
-            for y in range(ymin, ymax):
+        for x in range(xmin, xmax+1):
+            for y in range(ymin, ymax+1):
                 if self.tiles[(x, y)] != VOID():
                     empty = False
                     break
