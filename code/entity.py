@@ -231,6 +231,16 @@ class Spoon(Tool):
         super(Spoon, self).__init__(pos, texture)
 
         self.mass = 10
+        self.height = 0.9
+        self.width = 0.5
+
+class Shovel(Tool):
+    def __init__(self, pos, texture):
+        super(Shovel, self).__init__(pos, texture)
+
+        self.mass = 10
+        self.height = 0.9
+        self.width = 0.7
 
 class Crucible(Entity):
     def __init__(self, pos, texture):
@@ -244,17 +254,29 @@ class Crucible(Entity):
     def smelt(self, rock):
         self.smelting = self.texture.crucible_next_texture()
         self.time_since_texture = time.time()
+        self.smelting_mass = rock.mass
 
     def update(self, world, dt):
         self.update_texture(dt)
         self.update_posvel(dt)
         self.update_entity_collisions(world, dt)
         self.update_block_collisions(world, dt)
+
         if self.smelting and time.time() - self.time_since_texture > 2:
             self.smelting = self.texture.crucible_next_texture()
             self.time_since_texture = time.time()
             if not self.smelting:
-                world.entities.append(make_spoon(self.pos))
+                for i in range(2 ** (self.smelting_mass // 5 - 1)):
+                    thing_to_emit = make_spoon(self.pos)
+                    if random.random() < 0.5:
+                        thing_to_emit = make_shovel(self.pos)
+                    thing_to_emit.pos[0] += random.gauss(0, 0.01)
+                    thing_to_emit.pos[1] += random.gauss(0, 0.01)
+
+                    thing_to_emit.velocity[0] += random.gauss(0, 1)
+                    thing_to_emit.velocity[1] += random.gauss(0, 1)
+
+                    world.entities.append(thing_to_emit)
 
 class Flag(Entity):
     def update_texture(self, dt):
@@ -309,7 +331,13 @@ def make_spoon(pos):
 
     return Spoon(pos, entext)
 
+def make_shovel(pos):
+    animation = [
+        texture_asset.TextureAsset("shovel.png")
+    ]
+    entext = EntityTexture(*([animation] * 4))
 
+    return Shovel(pos, entext)
 
 def make_flag_am(pos):
     animation = [
@@ -351,6 +379,7 @@ def make_rock(pos, size=0):
 
     rock = Rock(pos, entext)
     rock.size_frame = size
+    rock.mass = (size + 1) * 5
 
     return rock
 
