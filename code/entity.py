@@ -193,6 +193,8 @@ class Entity:
 class Human(Entity):
     pass
 
+class Tool(Entity):
+    pass
 
 class Russian(Human):
     def __init__(self, pos, texture):
@@ -217,6 +219,11 @@ class Swede(Human):
         self.mass = 20
         self.height = 0.9
 
+class Spoon(Tool):
+    def __init__(self, pos, texture):
+        super(Spoon, self).__init__(pos, texture)
+
+        self.mass = 10
 
 class Crucible(Entity):
     def __init__(self, pos, texture):
@@ -284,6 +291,15 @@ def make_american(pos):
 
 def make_swede(pos):
     return Swede(pos, EntityTexture.load_walking_texture("SwSw", [0, 1, 0, 1]))
+
+def make_spoon(pos):
+    animation = [
+        texture_asset.TextureAsset("spoon.png")
+    ]
+    entext = EntityTexture(*([animation] * 4))
+
+    return Spoon(pos, entext)
+
 
 
 def make_flag_am(pos):
