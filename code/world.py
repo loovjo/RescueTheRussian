@@ -3,6 +3,7 @@ from collections import defaultdict
 from entity import *
 import math
 from queue import PriorityQueue
+from random import random
 
 PIXELS_PER_UNIT = 70
 
@@ -81,7 +82,12 @@ class World:
                     self.tiles[(x, y)] = here
 
     def onBreakWall(self, tile_x, tile_y):
-        self.entities.append(make_rock([tile_x, tile_y]))
+        rock = make_rock([0, 0])
+        rock.pos[0] = tile_x + rock.width / 2 + random() * (1 - rock.width)
+        rock.pos[1] = tile_y + rock.height / 2 + random() * (1 - rock.height)
+
+        self.entities.append(rock)
+
         for x in range(tile_x-1, tile_x+2):
             for y in range(tile_y-1, tile_y+2):
                 if self.tiles[(x, y)] == VOID():
