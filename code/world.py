@@ -82,16 +82,41 @@ class World:
                     self.tiles[(x, y)] = here
 
     def onBreakWall(self, tile_x, tile_y):
+
+        #add rock piece
         rock = make_rock([0, 0])
         rock.pos[0] = tile_x + rock.width / 2 + random() * (1 - rock.width)
         rock.pos[1] = tile_y + rock.height / 2 + random() * (1 - rock.height)
-
         self.entities.append(rock)
 
+        # add new room
+        if random() < 0.5:
+            success = False
+            for x in range(tile_x-7, tile_x):
+                for y in range(tile_y-5, tile_y):
+                    if self.is_void(x, x+7, y, y+5):
+                        self.make_cellar(x, y, "A")
+                        success = True
+                        break
+                if success:
+                    break
+
+        # fill up gaps in wall with cobble
         for x in range(tile_x-1, tile_x+2):
             for y in range(tile_y-1, tile_y+2):
                 if self.tiles[(x, y)] == VOID():
                     self.tiles[(x, y)] = WALL_COBBLE()
+
+    def is_void(self, xmin, xmax, ymin, ymax):
+        empty = True
+        for x in range(xmin, xmax):
+            for y in range(ymin, ymax):
+                if self.tiles[(x, y)] != VOID():
+                    empty = False
+                    break
+            if not empty:
+                break
+        return empty
 
     def replace_area(self, xmin, xmax, ymin, ymax, newTile):
         for x in range(xmin, xmax+1):
