@@ -246,7 +246,9 @@ class Flag(Entity):
         self.height = 0.5
         self.width = 1
 
+        self.mass = 5
 
+ROCK_SIZES = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 class Rock(Entity):
     def __init__(self, pos, texture):
         super(Rock, self).__init__(pos, texture)
@@ -256,14 +258,21 @@ class Rock(Entity):
 
         self.mass = 5
 
+        self.size_frame = 0
+
     def on_collision(self, other, world):
         if isinstance(self, Rock) and isinstance(other, Rock) and self.mass == other.mass:
             world.remove_entity(other)
             self.mass += 5
+            self.size_frame += 1
 
         if isinstance(self, Rock) and isinstance(other, Crucible):
             other.smelt(self)
             world.remove_entity(self)
+
+    def update_texture(self, dt):
+        self.texture.current_frame = self.size_frame
+        self.height = self.width = ROCK_SIZES[self.size_frame]
 
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
@@ -308,7 +317,12 @@ def make_flag_ru(pos):
 
 
 def make_rock(pos):
-    entext = EntityTexture(*([[texture_asset.TextureAsset("rock.png")]] * 4))
+    animation = [
+        texture_asset.TextureAsset("rock{}.png".format(i))
+        for i in range(7)
+    ]
+
+    entext = EntityTexture(*([animation] * 4))
 
     return Rock(pos, entext)
 
