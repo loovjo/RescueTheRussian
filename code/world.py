@@ -7,6 +7,7 @@ from random import random
 
 PIXELS_PER_UNIT = 70
 
+
 class World:
     def __init__(self):
 
@@ -23,12 +24,12 @@ class World:
         self.entities.append(make_flag_ru([3, 1.25]))
         self.entities.append(make_crucible([3, 3.25]))
 
-        self.tiles = defaultdict(lambda: VOID()) # {(x, y): Tile}
-        self.make_cellar(0, 0, "R")
-        self.make_cellar(8, 2, "A")
+        self.tiles = defaultdict(lambda: VOID())  # {(x, y): Tile}
+        self.make_cellar(0, 10, 0, 7, "R")
+        self.make_cellar(8, 7, 2, 5, "A")
         self.replace_area(8, 8, 3, 4, WALL_PAPER())
 
-        self.tile_nationality = {} # {pos: (nationality, distance to flag)}
+        self.tile_nationality = {}  # {pos: (nationality, distance to flag)}
 
         self.update_tile_nationality((2, 2), 'rus')
         print(self.tile_nationality)
@@ -55,22 +56,30 @@ class World:
             if isinstance(self.entities[i], Russian):
                 return i
 
-    def make_cellar(self, xmin, ymin, nationality):
+    def make_cellar(self, xmin, xsize, ymin, ysize, nationality):
         if nationality == "S":
-            xmax = xmin + 10
-            ymax = ymin + 7
+            if xsize == 0:
+                xsize = 10
+            if ysize == 0:
+                ysize = 7
         elif nationality == "A":
-            xmax = xmin + 7
-            ymax = ymin + 5
-            self.entities.append(make_american([xmin + 3, ymin + 4]))
-            self.entities.append(make_american([xmin +5, ymin + 3]))
-
-
+            if xsize == 0:
+                xsize = 7
+            if ysize == 0:
+                ysize = 5
+            self.entities.append(
+                make_american([xmin + 1 + math.floor(random() * (xsize-1)), ymin + 1 + math.floor(random() * (ysize-1))]))
         else:
-            xmax = xmin + 8
-            ymax = ymin + 7
-        for x in range(xmin, xmax+1):
-            for y in range(ymin, ymax+1):
+            if xsize == 0:
+                xsize = 8
+            if ysize == 0:
+                ysize = 7
+
+        xmax = xmin + xsize
+        ymax = ymin + ysize
+
+        for x in range(xmin, xmax + 1):
+            for y in range(ymin, ymax + 1):
                 here = None
 
                 if x == xmin or x == xmax or y == ymin or y == ymax:
@@ -83,7 +92,7 @@ class World:
 
     def onBreakWall(self, tile_x, tile_y):
 
-        #add rock piece
+        # add rock piece
         rock = make_rock([0, 0])
         rock.pos[0] = tile_x + rock.width / 2 + random() * (1 - rock.width)
         rock.pos[1] = tile_y + rock.height / 2 + random() * (1 - rock.height)
@@ -91,27 +100,29 @@ class World:
 
         # add new room
         if random() < 0.5:
+            sizex = 7 + math.floor((random()-0.5)*2)
+            sizey = 5 + math.floor((random()-0.5)*2)
             locations = [[]]
-            for x in range(tile_x-7, tile_x + 1):
-                for y in range(tile_y-5, tile_y + 1):
-                    if (x == tile_x-7 or x == tile_x) and (y == tile_y-5 or y == tile_y):
+            for x in range(tile_x - sizex, tile_x + 1):
+                for y in range(tile_y - sizey, tile_y + 1):
+                    if (x == tile_x - sizex or x == tile_x) and (y == tile_y - sizey or y == tile_y):
                         continue
-                    if self.is_void(x+1, x+6, y+1, y+4):
+                    if self.is_void(x + 1, x + sizex - 1, y + 1, y + sizey - 1):
                         locations.append([x, y])
             pos = locations[math.floor(random() * (len(locations)))]
             if len(pos) == 2:
-                self.make_cellar(pos[0], pos[1], "A")
+                self.make_cellar(pos[0], sizex, pos[1], sizey, "A")
 
         # fill up gaps in wall with cobble
-        for x in range(tile_x-1, tile_x+2):
-            for y in range(tile_y-1, tile_y+2):
+        for x in range(tile_x - 1, tile_x + 2):
+            for y in range(tile_y - 1, tile_y + 2):
                 if self.tiles[(x, y)] == VOID():
                     self.tiles[(x, y)] = WALL_COBBLE()
 
     def is_void(self, xmin, xmax, ymin, ymax):
         empty = True
-        for x in range(xmin, xmax+1):
-            for y in range(ymin, ymax+1):
+        for x in range(xmin, xmax + 1):
+            for y in range(ymin, ymax + 1):
                 if self.tiles[(x, y)] != VOID():
                     empty = False
                     break
@@ -120,12 +131,13 @@ class World:
         return empty
 
     def replace_area(self, xmin, xmax, ymin, ymax, newTile):
-        for x in range(xmin, xmax+1):
-            for y in range(ymin, ymax+1):
+        for x in range(xmin, xmax + 1):
+            for y in range(ymin, ymax + 1):
                 self.tiles[(x, y)] = newTile.copy()
 
     def transform_position(self, position):
-        return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2, (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
+        return [(position[0] - self.unit_origin[0]) * PIXELS_PER_UNIT + self.screen_width[0] / 2,
+                (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
 
     def update(self, dt):
         for entity in self.entities:
@@ -136,7 +148,7 @@ class World:
 
     def update_tile_nationality(self, pos, nationality):
         visited = set()
-        visiting = PriorityQueue() # Contains (-distance, (x, y))
+        visiting = PriorityQueue()  # Contains (-distance, (x, y))
         visiting.put((0, pos))
 
         while not visiting.empty():
