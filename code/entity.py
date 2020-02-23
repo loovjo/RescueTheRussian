@@ -13,7 +13,7 @@ BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
-DRAW_DEBUG_HITBOXES = False
+DRAW_DEBUG_HITBOXES = True
 
 BOUNCE_COEFFICIENT = 0.7
 
@@ -231,6 +231,16 @@ class Spoon(Tool):
         super(Spoon, self).__init__(pos, texture)
 
         self.mass = 10
+        self.height = 0.9
+        self.width = 0.5
+
+class Shovel(Tool):
+    def __init__(self, pos, texture):
+        super(Shovel, self).__init__(pos, texture)
+
+        self.mass = 10
+        self.height = 0.9
+        self.width = 0.7
 
 class Crucible(Entity):
     def __init__(self, pos, texture):
@@ -254,7 +264,10 @@ class Crucible(Entity):
             self.smelting = self.texture.crucible_next_texture()
             self.time_since_texture = time.time()
             if not self.smelting:
-                world.entities.append(make_spoon(self.pos))
+                if random.random() < 0.5:
+                    world.entities.append(make_spoon(self.pos))
+                else:
+                    world.entities.append(make_shovel(self.pos))
 
 class Flag(Entity):
     def update_texture(self, dt):
@@ -309,7 +322,13 @@ def make_spoon(pos):
 
     return Spoon(pos, entext)
 
+def make_shovel(pos):
+    animation = [
+        texture_asset.TextureAsset("shovel.png")
+    ]
+    entext = EntityTexture(*([animation] * 4))
 
+    return Shovel(pos, entext)
 
 def make_flag_am(pos):
     animation = [
