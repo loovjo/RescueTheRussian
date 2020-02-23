@@ -12,7 +12,7 @@ BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
-DRAW_DEBUG_HITBOXES = False
+DRAW_DEBUG_HITBOXES = True
 
 BOUNCE_COEFFICIENT = 0.7
 
@@ -248,7 +248,7 @@ class Flag(Entity):
 
         self.mass = 5
 
-
+ROCK_SIZES = [0.4, 0.6, 0.8, 1]
 class Rock(Entity):
     def __init__(self, pos, texture):
         super(Rock, self).__init__(pos, texture)
@@ -272,6 +272,7 @@ class Rock(Entity):
 
     def update_texture(self, dt):
         self.texture.current_frame = self.size_frame
+        self.height = self.width = ROCK_SIZES[self.size_frame]
 
 def make_player(pos):
     return Russian(pos, EntityTexture.load_walking_texture("RuRu"))
