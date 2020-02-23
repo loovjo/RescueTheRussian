@@ -13,7 +13,7 @@ BOX_SIZE = 3
 
 SLOW_DOWN = 10
 
-DRAW_DEBUG_HITBOXES = True
+DRAW_DEBUG_HITBOXES = False
 
 BOUNCE_COEFFICIENT = 0.7
 
@@ -254,20 +254,29 @@ class Crucible(Entity):
     def smelt(self, rock):
         self.smelting = self.texture.crucible_next_texture()
         self.time_since_texture = time.time()
+        self.smelting_mass = rock.mass
 
     def update(self, world, dt):
         self.update_texture(dt)
         self.update_posvel(dt)
         self.update_entity_collisions(world, dt)
         self.update_block_collisions(world, dt)
+
         if self.smelting and time.time() - self.time_since_texture > 2:
             self.smelting = self.texture.crucible_next_texture()
             self.time_since_texture = time.time()
             if not self.smelting:
-                if random.random() < 0.5:
-                    world.entities.append(make_spoon(self.pos))
-                else:
-                    world.entities.append(make_shovel(self.pos))
+                for i in range(2 ** (self.smelting_mass // 5 - 1)):
+                    thing_to_emit = make_spoon(self.pos)
+                    if random.random() < 0.5:
+                        thing_to_emit = make_shovel(self.pos)
+                    thing_to_emit.pos[0] += random.gauss(0, 0.01)
+                    thing_to_emit.pos[1] += random.gauss(0, 0.01)
+
+                    thing_to_emit.velocity[0] += random.gauss(0, 1)
+                    thing_to_emit.velocity[1] += random.gauss(0, 1)
+
+                    world.entities.append(thing_to_emit)
 
 class Flag(Entity):
     def update_texture(self, dt):
@@ -370,6 +379,7 @@ def make_rock(pos, size=0):
 
     rock = Rock(pos, entext)
     rock.size_frame = size
+    rock.mass = (size + 1) * 5
 
     return rock
 
