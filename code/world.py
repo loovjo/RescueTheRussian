@@ -89,7 +89,7 @@ class World:
                         here = wall_type()
                 elif self.tiles[(x, y)] == VOID():
                     here = FLOOR_WOOD()
-                if here != None:
+                if here is not None:
                     self.tiles[(x, y)] = here
 
     def onBreakWall(self, tile_x, tile_y):

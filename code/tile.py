@@ -78,21 +78,24 @@ class Fragile(Wall):
         if abs(vel_to_check) > BREAK_VELOCITY_MIN:
             print("bonk")
             if random.random() < self.break_prec:
-                world.tiles[at] = FLOOR_WOOD()
+                world.tiles[at] = FLOOR_COBBLE()
                 world.onBreakWall(at[0], at[1])
         return True
 
 def FLOOR_WOOD():
     return FloorTile("FLOOR_WOOD", SimpleTexture(TextureAsset("floorWood.png")))
 
+def FLOOR_COBBLE():
+    return FloorTile("FLOOR_COBBLE", SimpleTexture(TextureAsset("floorCobble.png")))
+
 def WALL_COBBLE():
-    return Fragile("WALL_COBBLE", 0.1, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+    return Fragile("WALL_COBBLE", 0.1, ConnectingTexture(TextureAsset("wallCobble.png"), lambda tile_pos: (tile_pos[0] == FLOOR_WOOD() or tile_pos[0] == FLOOR_COBBLE())))
 
 def WALL_PAPER():
-    return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+    return Fragile("WALL_PAPER", 1., ConnectingTexture(TextureAsset("wallPaper.png"), lambda tile_pos: (tile_pos[0] == FLOOR_WOOD() or tile_pos[0] == FLOOR_COBBLE())))
 
 def WALL_IRON():
-    return Fragile("WALL_IRON", 0.02, ConnectingTexture(TextureAsset("wallIron.png"), lambda tile_pos: tile_pos[0] == FLOOR_WOOD()))
+    return Fragile("WALL_IRON", 0.02, ConnectingTexture(TextureAsset("wallIron.png"), lambda tile_pos: (tile_pos[0] == FLOOR_WOOD() or tile_pos[0] == FLOOR_COBBLE())))
 
 def VOID():
     return Void("VOID", SimpleTexture(TextureAsset("empty.png")))
