@@ -64,7 +64,7 @@ class Wall(Tile):
     def walk_on(self, entity, world, at):
         return True
 
-BREAK_VELOCITY_MIN = 2
+BREAK_MOMENTUM_MIN = 2 * 50
 
 class Fragile(Wall):
     def __init__(self, tile_id, break_prec, tile_texture):
@@ -74,8 +74,9 @@ class Fragile(Wall):
     def walk_on(self, entity, world, at):
         is_above_or_below = abs(entity.pos[1] - at[1] - 0.5) > abs(entity.pos[0] - at[0] - 0.5)
         vel_to_check = entity.velocity[1] if is_above_or_below else entity.velocity[0]
+        momentum_to_check = vel_to_check * entity.mass
 
-        if abs(vel_to_check) > BREAK_VELOCITY_MIN:
+        if abs(momentum_to_check) > BREAK_MOMENTUM_MIN:
             print("bonk")
             if random.random() < self.break_prec:
                 world.tiles[at] = FLOOR_COBBLE()
