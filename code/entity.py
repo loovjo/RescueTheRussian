@@ -242,6 +242,14 @@ class Shovel(Tool):
         self.height = 0.9
         self.width = 0.7
 
+class SledgeHammer(Tool):
+    def __init__(self, pos, texture):
+        super(SledgeHammer, self).__init__(pos, texture)
+
+        self.mass = 10
+        self.height = 0.9
+        self.width = 0.4
+
 class Crucible(Entity):
     def __init__(self, pos, texture):
         super(Crucible, self).__init__(pos, texture)
@@ -338,6 +346,14 @@ def make_shovel(pos):
     entext = EntityTexture(*([animation] * 4))
 
     return Shovel(pos, entext)
+
+def make_sledgehammer(pos):
+    animation = [
+        texture_asset.TextureAsset("sledgehammer.png")
+    ]
+    entext = EntityTexture(*([animation] * 4))
+
+    return SledgeHammer(pos, entext)
 
 def make_flag_am(pos):
     animation = [
