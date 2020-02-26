@@ -33,10 +33,10 @@ class Entity:
 
         self.mass = 1  # kg
 
-    def update(self, world, dt):
+    def update(self, world, dt, possible_colliders):
         self.update_texture(dt)
         self.update_posvel(dt)
-        self.update_entity_collisions(world, dt)
+        self.update_entity_collisions(world, dt, possible_colliders)
         self.update_block_collisions(world, dt)
 
     def update_texture(self, dt):
@@ -70,13 +70,18 @@ class Entity:
             self.pos[1] = math.floor(self.pos[1] + self.height / 2) - self.height / 2
             self.velocity[1] *= -1
 
-    def update_entity_collisions(self, world, dt):
+    def update_entity_collisions(self, world, dt, possible_colliders):
         # Collide with other entities
         # TODO: Not very efficient to loop thrgouh all other entities, makes update O(n^2)
         # We could use some more efficient data structure for storing entities, with fast
         # queriyng for objects close to a point
 
-        for other in world.entities:
+        for idx in possible_colliders:
+            if idx < len(world.entities):
+                other = world.entities[idx]
+            else:
+                continue
+
             if other is self:
                 continue
 
@@ -264,11 +269,8 @@ class Crucible(Entity):
         self.time_since_texture = time.time()
         self.smelting_mass = rock.mass
 
-    def update(self, world, dt):
-        self.update_texture(dt)
-        self.update_posvel(dt)
-        self.update_entity_collisions(world, dt)
-        self.update_block_collisions(world, dt)
+    def update(self, world, dt, possible_colliders):
+        super().update(world, dt, possible_colliders)
 
         if self.smelting and time.time() - self.time_since_texture > 2:
             self.smelting = self.texture.crucible_next_texture()

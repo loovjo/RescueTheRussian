@@ -7,6 +7,11 @@ from random import random, choice
 
 PIXELS_PER_UNIT = 70
 
+def ifloor(x):
+    return int(math.floor(x))
+
+def iceil(x):
+    return int(math.ceil(x))
 
 class World:
     def __init__(self):
@@ -142,8 +147,24 @@ class World:
                 (position[1] - self.unit_origin[1]) * PIXELS_PER_UNIT + self.screen_width[1] / 2]
 
     def update(self, dt):
-        for entity in self.entities:
-            entity.update(self, dt)
+        # Map from integer coordinates to list of indicies into self.entities
+        tile_entidx_map = defaultdict(list)
+        # Map from entity index to coordinate list
+        entidx_tile_map = defaultdict(list)
+        for i, entity in enumerate(self.entities):
+            top_left_corner = (ifloor(entity.pos[0] - entity.width), ifloor(entity.pos[1] - entity.height))
+            bottom_right_corner = (iceil(entity.pos[0] - entity.width), iceil(entity.pos[1] - entity.height))
+            for x in range(top_left_corner[0], bottom_right_corner[0] + 1):
+                for y in range(top_left_corner[1], bottom_right_corner[1] + 1):
+                    tile_entidx_map[(x, y)].append(i)
+                    entidx_tile_map[i].append((x, y))
+
+        for i, entity in enumerate(self.entities):
+            collision_idxs = set()
+            for ipos in entidx_tile_map[i]:
+                collision_idxs |= set(tile_entidx_map[ipos])
+
+            entity.update(self, dt, collision_idxs)
 
         for (at, tile) in self.tiles.items():
             tile.update(self, at, dt)
