@@ -79,12 +79,9 @@ class Fragile(Wall):
 
         broke = False
         if abs(momentum_to_check) > BREAK_MOMENTUM_MIN:
-            print("bonk")
-            if random.random() < self.break_prec:
-                broke = True
+            print("Bonk")
 
-        if isinstance(entity, Shovel):
-            broke = random.random() ** 3 < self.break_prec
+            broke = random.random() / entity.break_chance < self.break_prec
 
         if broke:
             world.tiles[at] = FLOOR_COBBLE()

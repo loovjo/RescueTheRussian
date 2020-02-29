@@ -3,7 +3,7 @@ from collections import defaultdict
 from entity import *
 import math
 from queue import PriorityQueue
-from random import random, choice
+from random import random
 
 PIXELS_PER_UNIT = 70
 
@@ -62,6 +62,9 @@ class World:
                 return i
 
     def make_cellar(self, xmin, xsize, ymin, ysize, nationality):
+        distance_factor = random() * ((xmin + xsize / 2 - 4) ** 2 + (ymin + ysize / 2 - 3) ** 2) ** 0.25
+        print(distance_factor)
+
         if nationality == "S":
             if xsize == 0:
                 xsize = 10
@@ -78,12 +81,14 @@ class World:
             if xsize == 0:
                 xsize = 8
             if ysize == 0:
-                ysize = 7
+                ysize = 6
 
         xmax = xmin + xsize
         ymax = ymin + ysize
+        wall_type = WALL_COBBLE
+        if distance_factor > 5:
+            wall_type = WALL_IRON
 
-        wall_type = choice([WALL_COBBLE, WALL_IRON])
 
         for x in range(xmin, xmax + 1):
             for y in range(ymin, ymax + 1):
